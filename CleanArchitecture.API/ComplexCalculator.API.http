@@ -1,0 +1,6 @@
+@ComplexCalculator.API_HostAddress = http://localhost:5219
+
+GET {{ComplexCalculator.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
