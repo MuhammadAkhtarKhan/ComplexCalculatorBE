@@ -16,19 +16,25 @@ using ComplexCalculator.API.Hubs;
 [ApiController]
 public class AccountController : ControllerBase
 {
+    
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ApplicationDbContext _context;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
     public AccountController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        ApplicationDbContext context
+        ApplicationDbContext context,
+        RoleManager<IdentityRole> roleManager
+
         )
     {
-        _userManager = userManager;
+        this._userManager = userManager;
         _signInManager = signInManager;
         this._context = context;
+        this._roleManager = roleManager;
+       
     }
 
     [HttpPost("register")]
@@ -38,6 +44,10 @@ public class AccountController : ControllerBase
         var result = await _userManager.CreateAsync(user, model.Password);
         if (result.Succeeded)
         {
+            if (await _roleManager.RoleExistsAsync(model.Role))
+            {
+                await _userManager.AddToRoleAsync(user, model.Role);
+            }
             return Ok(new { Result = "User registered successfully" });
         }
         return BadRequest(result.Errors);
@@ -58,6 +68,7 @@ public class AccountController : ControllerBase
                 UserId = user.Id,
                 LoginTime = DateTime.UtcNow
             };
+           
             var userInSession=_context.UserSessions.FirstOrDefault(x=>x.UserId == user.Id);
             if (userInSession == null)
             {
@@ -69,10 +80,20 @@ public class AccountController : ControllerBase
                  _context.UserSessions.Update(session);
                  _context.SaveChanges();
             }
-            
-          
+            // Get roles for the user
+            var logInUser = new ApplicationUser
+            {
+                Email = user.Email,
+                PasswordHash = user.PasswordHash,
+                Id = user.Id,
+                UserName = user.UserName,
 
-            return Ok(new { Result = "Login successful", User= new{UserId= user.Id, UserEmail=user.Email} });
+            };
+            var roles = await _userManager.GetRolesAsync(logInUser);
+
+            Console.WriteLine(roles);
+
+            return Ok(new { Result = "Login successful", User= new{UserId= user.Id, UserEmail=user.Email, Roles=roles} });
         }
         return Unauthorized();
     }

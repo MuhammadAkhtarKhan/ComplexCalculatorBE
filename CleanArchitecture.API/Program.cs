@@ -44,4 +44,22 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
     endpoints.MapHub<UserHub>("/userhub");
 });
+// Call CreateRoles on app start
+//var serviceProvider = app.Services.CreateScope().ServiceProvider;
+//await CreateRoles(serviceProvider);
 app.Run();
+
+
+//async Task CreateRoles(IServiceProvider serviceProvider)
+//{
+//    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+//    string[] roleNames = { "Admin", "User" };
+//    foreach (var roleName in roleNames)
+//    {
+//        if (!await roleManager.RoleExistsAsync(roleName))
+//        {
+//            await roleManager.CreateAsync(new IdentityRole(roleName));
+//        }
+//    }
+//}

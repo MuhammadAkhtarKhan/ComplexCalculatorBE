@@ -10,4 +10,7 @@ namespace ComplexCalculator.Infrastructure.Identity
     public class ApplicationUser : IdentityUser
     {
     }
+    public class UserRoles : IdentityRole
+    {
+    }
 }
