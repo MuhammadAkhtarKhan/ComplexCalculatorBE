@@ -13,8 +13,8 @@ namespace ComplexCalculator.Application.MappingProfiles
     {
         public CalculatorProfile()
         {
-            CreateMap<CalculatorModel, Calculator>().ReverseMap();
-            CreateMap<Calculator, CalculatorModel>();
+            CreateMap<CalculatorResponseModel, Calculator>().ReverseMap();
+            CreateMap<Calculator, CalculatorResponseModel>();
             CreateMap<Calculator, CalculatorSumModel>();
             //CreateMap<CreateLeaveTypeCommand, LeaveType>();
             //CreateMap<UpdateLeaveTypeCommand, LeaveType>();

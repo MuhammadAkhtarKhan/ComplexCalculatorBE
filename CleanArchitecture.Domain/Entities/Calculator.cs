@@ -17,6 +17,8 @@
         public int Luozi { get; set; }
         public string? UserId { get; set; }
         public DateTime? CreatedOn { get; set; }
+        public int Version { get; set; }
+        public int BatchNo { get; set; }
 
     }
 }

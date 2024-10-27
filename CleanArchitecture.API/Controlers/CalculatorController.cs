@@ -26,25 +26,32 @@ namespace ComplexCalculator.API.Controlers
             return Ok(new { result = result });
         }
 
+         [HttpGet(nameof(GetLatestBatchNo))]
+        public async Task<IActionResult> GetLatestBatchNo(string UserId)
+        {
+            var result = await this._calculator.GetLatestBatchNo(UserId);
+            return Ok(new { BatchNo = result });
+        }
+
         [HttpPost(nameof(AddData))]
-        public async Task<IActionResult> AddData([FromBody] CalculatorModel calculatorModel)
+        public async Task<IActionResult> AddData([FromBody] CalculatorResponseModel calculatorModel)
         {
             var result = await this._calculator.AddCalculation(calculatorModel);
             return Ok(result);
         }
 
         [HttpPost(nameof(AddMultiple))]
-        public async Task<IActionResult> AddMultiple([FromBody] List<CalculatorModel> calculatorModel)
+        public async Task<IActionResult> AddMultiple([FromBody] List<CalculatorResponseModel> calculatorModel)
         {
             var result = await this._calculator.AddMultiple(calculatorModel);
 
             return Ok(result);
         }
 
-        [HttpGet(nameof(GetAllSum))]
-        public async Task<IActionResult> GetAllSum(string userId)
+        [HttpGet("GetAllSum/{UserId}/{VersionValue}/{BatchNo}")]
+        public async Task<IActionResult> GetAllSum(string UserId, int VersionValue, int BatchNo)
         {
-            var result = await this._calculator.GetAllSum(userId);
+            var result = await this._calculator.GetAllSum(UserId, VersionValue, BatchNo);
             return Ok(result);
         }
 

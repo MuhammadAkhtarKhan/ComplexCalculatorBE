@@ -9,11 +9,12 @@ namespace ComplexCalculator.Application.Contracts.Calculator
 {
     public interface ICalculator
     {
-        public Task<CalculatorModel> GetAllByUserId(string UserId);
-        public Task<string> AddCalculation(CalculatorModel calculatorModel);
-        public Task<string> AddMultiple(List<CalculatorModel> lstCalculations);
-        public Task<CalculatorModel> GetLatest(string UserId);
-        public Task<List<CalculatorSumModel>> GetAllSum(string UserId);
+        public Task<CalculatorResponseModel> GetAllByUserId(string UserId);
+        public Task<string> AddCalculation(CalculatorResponseModel calculatorModel);
+        public Task<string> AddMultiple(List<CalculatorResponseModel> lstCalculations);
+        public Task<CalculatorResponseModel> GetLatest(string UserId);
+        public Task<int> GetLatestBatchNo(string UserId);
+        public Task<List<CalculatorSumModel>> GetAllSum(string UserId, int VersionValue, int BatchNo);
        
     }
 }

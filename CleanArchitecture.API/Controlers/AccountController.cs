@@ -11,6 +11,7 @@ using System.Linq;
 using ComplexCalculator.Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 using ComplexCalculator.API.Hubs;
+using ComplexCalculator.Application.Contracts.Calculator;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -21,20 +22,22 @@ public class AccountController : ControllerBase
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ApplicationDbContext _context;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly ICalculator _calculator;
 
     public AccountController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         ApplicationDbContext context,
         RoleManager<IdentityRole> roleManager
-
+,
+        ICalculator calculator
         )
     {
         this._userManager = userManager;
         _signInManager = signInManager;
         this._context = context;
         this._roleManager = roleManager;
-       
+        _calculator = calculator;
     }
 
     [HttpPost("register")]
@@ -90,10 +93,19 @@ public class AccountController : ControllerBase
 
             };
             var roles = await _userManager.GetRolesAsync(logInUser);
+            var batchNo= await _calculator.GetLatestBatchNo(user.Id);
+            if (batchNo==0)
+            {
+                batchNo = 1;
+            }
+            else
+            {
+                batchNo += 1;
+            }
 
             Console.WriteLine(roles);
 
-            return Ok(new { Result = "Login successful", User= new{UserId= user.Id, UserEmail=user.Email, Roles=roles} });
+            return Ok(new { Result = "Login successful", User= new{UserId= user.Id, UserEmail=user.Email, Roles=roles, BatchNo=batchNo} });
         }
         return Unauthorized();
     }

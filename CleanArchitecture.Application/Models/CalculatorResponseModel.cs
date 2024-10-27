@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ComplexCalculator.Application.Models
 {
-    public class CalculatorModel
+    public class CalculatorResponseModel
     {
 
         public float? Name { get; set; } = 0.0F;
@@ -23,6 +23,8 @@ namespace ComplexCalculator.Application.Models
         public int Luozi { get; set; }
         public string? UserId { get; set; }
         public DateTime? CreatedOn { get; set; }
+        public int Version { get; set; }
+        public int BatchNo { get; set; }
 
     }
 

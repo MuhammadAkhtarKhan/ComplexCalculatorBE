@@ -24,7 +24,7 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             this._context = context;
             this._mapper = mapper;
         }
-        public async Task<string> AddCalculation(CalculatorModel calculatorModel)
+        public async Task<string> AddCalculation(CalculatorResponseModel calculatorModel)
         {
             if (calculatorModel == null) { throw new ArgumentNullException(nameof(calculatorModel)); }
             try
@@ -43,7 +43,7 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
 
 
         }
-        public async Task<string> AddMultiple(List<CalculatorModel> lstCalculation)
+        public async Task<string> AddMultiple(List<CalculatorResponseModel> lstCalculation)
         {
             if (lstCalculation.Count < 0) { throw new ArgumentNullException(nameof(lstCalculation)); }
             try
@@ -67,16 +67,16 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
 
         }
 
-        public Task<CalculatorModel> GetAllByUserId(string UserId)
+        public Task<CalculatorResponseModel> GetAllByUserId(string UserId)
         {
             throw new NotImplementedException();
         }
-        public async Task<List<CalculatorSumModel>> GetAllSum(string UserId)
+        public async Task<List<CalculatorSumModel>> GetAllSum(string UserId, int VersionValue, int BatchNo)
         {
             List<Calculator> calculatorList = new List<Calculator>();
           
             var result = await _context.Calculators
-                  .Where(c => c.UserId == UserId) // Filter by UserId
+                  .Where(c => c.UserId == UserId && c.Version==VersionValue && c.BatchNo==BatchNo) // Filter by UserId
                   .GroupBy(t => t.UserId)
                              .Select(t => new
                              {
@@ -107,7 +107,7 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
 
         }
 
-        public async Task<CalculatorModel> GetLatest(string UserId)
+        public async Task<CalculatorResponseModel> GetLatest(string UserId)
         {
             if (UserId == null) { throw new ArgumentNullException(nameof(UserId)); }
 
@@ -117,7 +117,7 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             }
 
             var result = await _context.Calculators.FirstOrDefaultAsync(x => x.UserId == UserId);
-            // CalculatorModel model = new CalculatorModel();
+            // CalculatorResponseModel model = new CalculatorResponseModel();
             // if (result!=null)
             // {
             //     model.UserId = UserId;
@@ -131,9 +131,28 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             // }     
 
             // return model;
-            CalculatorModel calculatorModel = _mapper.Map<CalculatorModel>(result);
+            CalculatorResponseModel calculatorModel = _mapper.Map<CalculatorResponseModel>(result);
             return calculatorModel;
 
         }
+         public async Task<int> GetLatestBatchNo(string UserId)
+        {
+            if (UserId == null) { throw new ArgumentNullException(nameof(UserId)); }
+
+            if (_context == null)
+            {
+                throw new InvalidOperationException("Database context is not available.");
+            }
+
+            var latestBatchNo = await _context.Calculators
+                            .Where(c => c.UserId == UserId)
+                            .OrderByDescending(c => c.BatchNo)
+                            .Select(c => c.BatchNo)
+                            .FirstOrDefaultAsync();
+
+            return latestBatchNo;
+
+        }
+
     }
 }
