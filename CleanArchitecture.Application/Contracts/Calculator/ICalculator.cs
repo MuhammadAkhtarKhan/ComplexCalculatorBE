@@ -14,7 +14,7 @@ namespace ComplexCalculator.Application.Contracts.Calculator
         public Task<string> AddMultiple(List<CalculatorResponseModel> lstCalculations);
         public Task<CalculatorResponseModel> GetLatest(string UserId);
         public Task<int> GetLatestBatchNo(string UserId);
-        public Task<List<CalculatorSumModel>> GetAllSum(string UserId, int VersionValue, int BatchNo);
+        public Task<CalculatorResponse> GetAllSum(string UserId, int VersionValue, int BatchNo);
        
     }
 }

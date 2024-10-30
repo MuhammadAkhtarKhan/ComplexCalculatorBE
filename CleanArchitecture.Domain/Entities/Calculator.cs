@@ -3,7 +3,11 @@
     public class Calculator
     {
         public int Id { get; set; }
-        public float? Name { get; set; } = 0.0F;
+        public int? Changci { get; set; }
+        public int? Tongshu { get; set; }
+        public string? RawData { get; set; } = "";
+        public string? IdentifiedData { get; set; } = "";
+        public string? Name { get; set; } = "";
         public int One { get; set; }
         public int Two { get; set; }
         public int Three { get; set; }

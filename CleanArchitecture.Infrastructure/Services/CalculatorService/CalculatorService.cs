@@ -71,9 +71,10 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
         {
             throw new NotImplementedException();
         }
-        public async Task<List<CalculatorSumModel>> GetAllSum(string UserId, int VersionValue, int BatchNo)
+        public async Task<CalculatorResponse> GetAllSum(string UserId, int VersionValue, int BatchNo)
         {
-            List<Calculator> calculatorList = new List<Calculator>();
+            CalculatorResponse calculatorResponse = new CalculatorResponse();
+            List<CalculatorSumModel> calculatorSumModelsList = new List<CalculatorSumModel>();
           
             var result = await _context.Calculators
                   .Where(c => c.UserId == UserId && c.Version==VersionValue && c.BatchNo==BatchNo) // Filter by UserId
@@ -88,9 +89,10 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
                                  Six = t.Sum(d => d.Six),
                                  Luozi = t.Sum(d => d.Luozi)
                              }).ToListAsync();
+
             foreach (var item in result)
             {
-                calculatorList.Add(new Calculator
+                calculatorSumModelsList.Add(new CalculatorSumModel
                 {
                     One = item.One,
                     Two = item.Two,
@@ -101,9 +103,23 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
                     Luozi = item.Luozi
                 });
             }
-            List<CalculatorSumModel> calculatorRes = _mapper.Map<List<CalculatorSumModel>>(calculatorList);
 
-            return calculatorRes ?? new List<CalculatorSumModel>();
+            var resultRecords = await _context.Calculators
+               .Where(c => c.UserId == UserId && c.Version == VersionValue && c.BatchNo == BatchNo) // Filter by UserId              
+                          .Select(t => new GridCalculatorModel
+                          {
+                              Name = t.Name,
+                              IdentifiedData = t.IdentifiedData,
+                              Changci = t.Changci,
+                              Tongshu = t.Tongshu                             
+                          }).ToListAsync();
+            
+            calculatorResponse.calculatorResponse = calculatorSumModelsList;
+            calculatorResponse.gridCalculatorModel=resultRecords;
+
+            //List<CalculatorSumModel> calculatorRes = _mapper.Map<List<CalculatorSumModel>>(calculatorList);
+
+            return calculatorResponse;
 
         }
 

@@ -16,6 +16,9 @@ namespace ComplexCalculator.Application.MappingProfiles
             CreateMap<CalculatorResponseModel, Calculator>().ReverseMap();
             CreateMap<Calculator, CalculatorResponseModel>();
             CreateMap<Calculator, CalculatorSumModel>();
+            CreateMap<CalculatorSumModel, Calculator>().ReverseMap();
+            CreateMap<Calculator, GridCalculatorModel>();
+            CreateMap<CalculatorSumModel, CalculatorResponse>();
             //CreateMap<CreateLeaveTypeCommand, LeaveType>();
             //CreateMap<UpdateLeaveTypeCommand, LeaveType>();
         }
