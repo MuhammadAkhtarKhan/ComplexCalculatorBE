@@ -52,6 +52,7 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
                 foreach (Calculator calculator in calculatons)
                 {
                     calculator.CreatedOn = DateTime.Now;
+                    calculator.Changci = 1;
                     await _context.Calculators.AddAsync(calculator);
                 }
 
@@ -122,6 +123,37 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             return calculatorResponse;
 
         }
+          public async Task<string> UpdateTongshu(string UserId, int VersionValue, int BatchNo, int Tongshu)
+        {
+
+            try
+            {
+                var result = await _context.Calculators
+                                 .Where(c => c.UserId == UserId && c.Version == VersionValue && c.BatchNo == BatchNo).ToListAsync(); // Filter by UserId
+
+                // Update the Tongshu value for each item in the result
+                if (result.Count == 0)
+                {
+                    return " No record found!";
+                }
+                foreach (var item in result)
+                {
+                    item.Tongshu = Tongshu;
+                }
+
+                // Save the changes to the database
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+           
+
+            return "success";
+
+        }
 
         public async Task<CalculatorResponseModel> GetLatest(string UserId)
         {
@@ -151,7 +183,7 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             return calculatorModel;
 
         }
-         public async Task<int> GetLatestBatchNo(string UserId)
+        public async Task<int> GetLatestBatchNo(string UserId)
         {
             if (UserId == null) { throw new ArgumentNullException(nameof(UserId)); }
 

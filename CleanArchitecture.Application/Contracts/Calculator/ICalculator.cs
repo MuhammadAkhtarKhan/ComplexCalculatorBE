@@ -15,6 +15,7 @@ namespace ComplexCalculator.Application.Contracts.Calculator
         public Task<CalculatorResponseModel> GetLatest(string UserId);
         public Task<int> GetLatestBatchNo(string UserId);
         public Task<CalculatorResponse> GetAllSum(string UserId, int VersionValue, int BatchNo);
+        public Task<string> UpdateTongshu(string UserId, int VersionValue, int BatchNo, int Tongshu);
        
     }
 }

@@ -55,5 +55,12 @@ namespace ComplexCalculator.API.Controlers
             return Ok(result);
         }
 
+        [HttpPut("UpdateTongshu/{UserId}/{VersionValue}/{BatchNo}")]
+        public async Task<IActionResult> UpdateTongshu(string UserId, int VersionValue, int BatchNo, int Tongshu)
+        {
+            var result = await this._calculator.UpdateTongshu(UserId, VersionValue, BatchNo, Tongshu);
+            return Ok(result);
+        }
+
     }
 }
