@@ -154,6 +154,68 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             return "success";
 
         }
+         public async Task<string> UpdateShutting(string UserId, int VersionValue, int BatchNo, int OpentValue)
+        {
+
+            try
+            {
+                var result = await _context.Calculators
+                                 .Where(c => c.UserId == UserId && c.Version == VersionValue && c.BatchNo == BatchNo).ToListAsync(); // Filter by UserId
+
+                // Update the Tongshu value for each item in the result
+                if (result.Count == 0)
+                {
+                    return " No record found!";
+                }
+                foreach (var item in result)
+                {
+                    item.Shutting = OpentValue;
+                }
+
+                // Save the changes to the database
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+           
+
+            return "Shutting updated successfully!";
+
+        }
+        public async Task<string> UpdateGroupNo(string UserId, int VersionValue, int BatchNo, int GroupNo)
+        {
+
+            try
+            {
+                var result = await _context.Calculators
+                                 .Where(c => c.UserId == UserId && c.Version == VersionValue && c.BatchNo == BatchNo)
+                                 .ToListAsync();
+
+                if (result.Count == 0)
+                {
+                    return " No record found!";
+                }
+                foreach (var item in result)
+                {
+                    item.GroupNo = GroupNo;
+                }
+
+                // Save the changes to the database
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+           
+
+            return "Group number updated successfully!";
+
+        }
 
         public async Task<CalculatorResponseModel> GetLatest(string UserId)
         {

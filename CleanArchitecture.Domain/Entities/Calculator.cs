@@ -23,6 +23,8 @@
         public DateTime? CreatedOn { get; set; }
         public int Version { get; set; }
         public int BatchNo { get; set; }
+        public int? Shutting { get; set; }
+        public int? GroupNo { get; set; }
 
     }
 }

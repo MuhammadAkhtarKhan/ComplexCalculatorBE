@@ -62,5 +62,19 @@ namespace ComplexCalculator.API.Controlers
             return Ok(result);
         }
 
+        [HttpPut("UpdateShutting/{UserId}/{VersionValue}/{BatchNo}")]
+        public async Task<IActionResult> UpdateShutting(string UserId, int VersionValue, int BatchNo, int OpenValue)
+        {
+            var result = await this._calculator.UpdateShutting(UserId, VersionValue, BatchNo, OpenValue);
+            return Ok(result);
+        }
+
+        [HttpPut("UpdateGroupNo/{UserId}/{VersionValue}/{BatchNo}")]
+        public async Task<IActionResult> UpdateGroupNo(string UserId, int VersionValue, int BatchNo, int GroupNo)
+        {
+            var result = await this._calculator.UpdateGroupNo(UserId, VersionValue, BatchNo, GroupNo);
+            return Ok(result);
+        }
+
     }
 }
