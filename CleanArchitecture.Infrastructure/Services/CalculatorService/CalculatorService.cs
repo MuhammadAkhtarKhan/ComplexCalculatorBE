@@ -151,7 +151,7 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             }
            
 
-            return "success";
+            return "Data Updated Successfully!";
 
         }
          public async Task<string> UpdateShutting(string UserId, int VersionValue, int BatchNo, int OpentValue)

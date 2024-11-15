@@ -23,12 +23,16 @@ namespace ComplexCalculator.Application.Models
         public int? A { get; set; }
         public int? B { get; set; }
         public int? C { get; set; }
+        public int? D { get; set; }
+        public int? E { get; set; }
         public string? Format { get; set; }
         public int Luozi { get; set; }
         public string? UserId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int Version { get; set; }
         public int BatchNo { get; set; }
+        public int? GroupNo { get; set; }
+        public int? Shutting { get; set; }
 
     }
 
