@@ -1,4 +1,6 @@
-﻿using ComplexCalculator.Application.Contracts.Calculator;
+﻿using ComplexCalculator.Application.Contracts.Admin;
+using ComplexCalculator.Application.Contracts.Calculator;
+using ComplexCalculator.Infrastructure.Services.Admin;
 using ComplexCalculator.Infrastructure.Services.CalculatorService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,7 @@ namespace ComplexCalculator.Infrastructure
         {
             //services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
             services.AddTransient<ICalculator, CalculatorService>();
+            services.AddTransient<IAdmin, AdminService>();
             //services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 
             return services;

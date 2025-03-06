@@ -92,6 +92,7 @@ public class AccountController : ControllerBase
                 UserName = user.UserName,
 
             };
+            
             var roles = await _userManager.GetRolesAsync(logInUser);
             var batchNo= await _calculator.GetLatestBatchNo(user.Id);
             if (batchNo==0)

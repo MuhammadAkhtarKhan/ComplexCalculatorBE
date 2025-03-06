@@ -33,6 +33,8 @@ namespace ComplexCalculator.Application.Models
         public int BatchNo { get; set; }
         public int? GroupNo { get; set; }
         public int? Shutting { get; set; }
+        public string? InputByUser { get; set; }
+        public string? AccumulatedRawData { get; set; }
 
     }
 
