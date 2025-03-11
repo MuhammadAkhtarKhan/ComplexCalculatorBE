@@ -22,6 +22,7 @@ namespace ComplexCalculator.Infrastructure.Services.Admin
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;       
         private readonly string _connectionString;
+        
 
         public AdminService(ApplicationDbContext context, IMapper mapper,IConfiguration configuration)
         {
@@ -36,17 +37,33 @@ namespace ComplexCalculator.Infrastructure.Services.Admin
             using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            using var multi = await connection.QueryMultipleAsync(
+            // Execute the query and get the GridReader
+            var multi = await connection.QueryMultipleAsync(
                 "EXEC dbo.GetSummaryAndGridDataByGroupNo @GroupNo",
                 new { GroupNo = GroupNo }
             );
 
-            var summary = await multi.ReadFirstOrDefaultAsync<CalculatorSumModel>();
-            var calculations = (await multi.ReadAsync<AdminCalculations>()).ToList();
-            newList.Summary = summary;
-            newList.Calculations = calculations;
+            try
+            {
+                // Read single-row summary grid data
+                newList.SummaryGrid = await multi.ReadFirstOrDefaultAsync<SummaryGridPannel>();
+
+                // Read single-row summary data
+                newList.Summary = await multi.ReadFirstOrDefaultAsync<CalculatorSumModel>();
+
+                // Read multiple-row admin calculations
+                newList.Calculations = (await multi.ReadAsync<AdminCalculations>()).ToList();
+
+                // Read groups for drop down
+                newList.Groups = (await multi.ReadAsync<GroupDropDown>())?.ToList() ?? new List<GroupDropDown>();
+            }
+            finally
+            {
+                // Explicitly dispose of the GridReader after all data is read
+                multi.Dispose();
+            }
+
             return newList;
-            
         }
     }
 }

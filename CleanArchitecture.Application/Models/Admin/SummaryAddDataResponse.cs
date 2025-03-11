@@ -10,7 +10,19 @@ namespace ComplexCalculator.Application.Models.Admin
     {
         public CalculatorSumModel? Summary { get; set; }
         public List<AdminCalculations>? Calculations { get; set; }
+        public SummaryGridPannel? SummaryGrid { get; set; }
+        public List<GroupDropDown>? Groups { get; set; }
 
+    }
+
+    public class GroupDropDown
+    {
+        public int GroupNo { get; set; }
+    }
+    public class SummaryGridPannel
+    {
+        public int ConnectedUsers { get; set; } = 0;
+        public float WinOrLose { get; set; } = 0;
     }
 
     public class AdminCalculations
@@ -29,7 +41,10 @@ namespace ComplexCalculator.Application.Models.Admin
         public int Version { get; set; }       
         public int? GroupNo { get; set; }
         public int? Shutting { get; set; }
-        public string? InputByUser { get; set; }        
+        public string? InputByUser { get; set; }
+        public float? WinOrLose { get; set; }
+        public float? MainTube { get; set; }
+        public float? SmallTable { get; set; }
     }
 
    

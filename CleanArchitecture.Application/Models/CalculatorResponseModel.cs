@@ -35,6 +35,8 @@ namespace ComplexCalculator.Application.Models
         public int? Shutting { get; set; }
         public string? InputByUser { get; set; }
         public string? AccumulatedRawData { get; set; }
+        public float? WinOrLose { get; set; }
+        public float? MainTube { get; set; }
 
     }
 
