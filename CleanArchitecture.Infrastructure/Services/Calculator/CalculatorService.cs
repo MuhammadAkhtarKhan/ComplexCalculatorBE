@@ -54,14 +54,13 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
                     calculator.CreatedOn = DateTime.Now;
                     calculator.Changci = 1;
                     await _context.Calculators.AddAsync(calculator);
-                }
-
+                }               //await _context.Calculators.AddRangeAsync(calculatons);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                return ex.Message;
             }
             return "Data added!";
 

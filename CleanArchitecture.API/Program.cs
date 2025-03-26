@@ -41,8 +41,10 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllers();
-    endpoints.MapHub<UserHub>("/userhub");
+    _ = endpoints.MapControllers();
+    _ = endpoints.MapHub<UserHub>("/userhub");
+    _ = endpoints.MapHub<ChatHub>("/chatHub");
+
 });
 // Call CreateRoles on app start
 //var serviceProvider = app.Services.CreateScope().ServiceProvider;
