@@ -12,4 +12,6 @@ namespace ComplexCalculator.API.Hubs
             await Clients.All.SendAsync("ReceiveMessage", lstCalculations);
         }
     }
+
+
 }

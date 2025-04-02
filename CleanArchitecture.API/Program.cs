@@ -44,6 +44,7 @@ app.UseEndpoints(endpoints =>
     _ = endpoints.MapControllers();
     _ = endpoints.MapHub<UserHub>("/userhub");
     _ = endpoints.MapHub<ChatHub>("/chatHub");
+    _ = endpoints.MapHub<SyncDataHub>("/syncdataHub");
 
 });
 // Call CreateRoles on app start
