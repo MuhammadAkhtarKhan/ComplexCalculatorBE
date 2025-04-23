@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ComplexCalculator.Application.Contracts.Calculator;
 using ComplexCalculator.Application.Models;
+using System.Diagnostics;
 
 namespace ComplexCalculator.API.Controlers
 {
@@ -43,8 +44,30 @@ namespace ComplexCalculator.API.Controlers
         [HttpPost(nameof(AddMultiple))]
         public async Task<IActionResult> AddMultiple([FromBody] List<CalculatorResponseModel> calculatorModel)
         {
+            //var stopwatch = Stopwatch.StartNew();
+
             var result = await this._calculator.AddMultiple(calculatorModel);
 
+            //stopwatch.Stop();
+
+            //var elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+
+            return Ok(result);
+        }
+
+        //write a get method to get all data
+        [HttpGet(nameof(GetAll))]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await this._calculator.GetAll();
+            return Ok(result);
+        }
+
+        //write a delete method to delete all data by userId
+        [HttpDelete(nameof(DeleteAllByUserId))]
+        public async Task<IActionResult> DeleteAllByUserId(string UserId)
+        {
+            var result = await this._calculator.DeleteAllByUserId(UserId);
             return Ok(result);
         }
 

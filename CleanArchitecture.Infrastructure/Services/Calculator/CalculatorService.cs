@@ -43,33 +43,147 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
 
 
         }
-        public async Task<string> AddMultiple(List<CalculatorResponseModel> lstCalculation)
+        // write a method to delete all data by userId and return the success message
+        public async Task<string> DeleteAllByUserId(string UserId)
         {
-            if (lstCalculation.Count < 0) { throw new ArgumentNullException(nameof(lstCalculation)); }
+            if (UserId == null) { throw new ArgumentNullException(nameof(UserId)); }
             try
             {
-                List<Calculator> calculatons = _mapper.Map<List<Calculator>>(lstCalculation);
-                foreach (Calculator calculator in calculatons)
+                var result = await _context.Calculators
+                    .Where(c => c.UserId == UserId)
+                    .ToListAsync();
+                if (result.Count == 0)
                 {
-                    calculator.CreatedOn = DateTime.Now;
-                    calculator.Changci = 1;
-                    await _context.Calculators.AddAsync(calculator);
-                }               //await _context.Calculators.AddRangeAsync(calculatons);
+                    return "No record found!";
+                }
+                _context.Calculators.RemoveRange(result);
                 await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return "Data deleted successfully!";
+        }
+        public async Task<List<CalculatorResponseModel>> AddMultiple(List<CalculatorResponseModel> lstCalculation)
+        {
+            if (lstCalculation == null || lstCalculation.Count <= 0)
+                throw new ArgumentNullException(nameof(lstCalculation));
+
+            try
+            {
+                // Map input to entity list
+                List<Calculator> calculations = _mapper.Map<List<Calculator>>(lstCalculation);
+                var userIds = calculations.Select(c => c.UserId).Distinct().ToList();
+                var ids = calculations.Select(c => c.Id).Distinct().ToList();
+
+                // Query existing records in one call
+                var existingRecords = await _context.Calculators
+                    .Where(c => userIds.Contains(c.UserId) && ids.Contains(c.Id))
+                    .ToListAsync();
+
+                var resultList = new List<Calculator>();
+
+                foreach (var calc in calculations)
+                {
+                    var existing = existingRecords
+                        .FirstOrDefault(c => c.UserId == calc.UserId && c.Id == calc.Id);
+
+                    if (existing != null)
+                    {
+                        // Update existing
+                        existing.Tongshu = calc.Tongshu;
+                        existing.InputByUser = calc.InputByUser;
+                        existing.GroupNo = calc.GroupNo;
+                        existing.Changci = calc.Changci;
+                        existing.Shutting = calc.Shutting;
+                        existing.EndThread = calc.EndThread;
+                        existing.WinOrLose = calc.WinOrLose;
+                        existing.MainTube = calc.MainTube;
+                        existing.IsPrevious = true;
+
+                        resultList.Add(existing);
+                    }
+                    else
+                    {
+                        // New record
+                        calc.CreatedOn = DateTime.Now;
+                        calc.Changci = 1;
+
+                        _context.Calculators.Add(calc); // no await needed here
+                        resultList.Add(calc);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+                return _mapper.Map<List<CalculatorResponseModel>>(resultList);
             }
             catch (Exception ex)
             {
-
-                return ex.Message;
+                throw new Exception($"Error in AddMultiple: {ex.Message}");
             }
-            return "Data added!";
-
-
         }
 
-        public Task<CalculatorResponseModel> GetAllByUserId(string UserId)
+        //public async Task<List<CalculatorResponseModel>> AddMultiple(List<CalculatorResponseModel> lstCalculation)
+        //{
+        //    if (lstCalculation == null || lstCalculation.Count <= 0)
+        //        throw new ArgumentNullException(nameof(lstCalculation));
+
+        //    var resultList = new List<Calculator>();
+
+        //    try
+        //    {
+        //        List<Calculator> calculations = _mapper.Map<List<Calculator>>(lstCalculation);
+
+        //        foreach (Calculator calc in calculations)
+        //        {
+        //            // Check by UserId and Id
+        //            var existingCalc = await _context.Calculators
+        //                .FirstOrDefaultAsync(c => c.UserId == calc.UserId && c.Id == calc.Id);
+
+        //            if (existingCalc != null)
+        //            {
+        //                // Update existing entry
+        //                existingCalc.Tongshu = calc.Tongshu;
+        //                existingCalc.InputByUser = calc.InputByUser;
+        //                existingCalc.GroupNo = calc.GroupNo;
+        //                existingCalc.Changci = calc.Changci;
+        //                existingCalc.Shutting = calc.Shutting;
+        //                existingCalc.EndThread = calc.EndThread;
+        //                existingCalc.WinOrLose = calc.WinOrLose;
+        //                existingCalc.MainTube = calc.MainTube;
+        //                existingCalc.IsPrevious = true;
+
+        //                resultList.Add(existingCalc);
+        //            }
+        //            else
+        //            {
+        //                // Add new entry
+        //                calc.CreatedOn = DateTime.Now;
+        //                calc.Changci = 1;
+
+        //                await _context.Calculators.AddAsync(calc);
+        //                resultList.Add(calc);
+        //            }
+        //        }
+
+        //        await _context.SaveChangesAsync();
+
+        //        // Map back to response model to return
+        //        return _mapper.Map<List<CalculatorResponseModel>>(resultList);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception($"Error in AddMultiple: {ex.Message}");
+        //    }
+        //}
+
+
+        public Task<List<CalculatorResponseModel>> GetAll()
         {
-            throw new NotImplementedException();
+            var result = _context.Calculators.ToList();
+            return Task.FromResult(_mapper.Map<List<CalculatorResponseModel>>(result));
         }
         public async Task<CalculatorResponse> GetAllSum(string UserId, int VersionValue, int BatchNo)
         {

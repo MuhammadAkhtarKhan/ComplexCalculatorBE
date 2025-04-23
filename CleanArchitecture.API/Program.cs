@@ -5,6 +5,7 @@ using ComplexCalculator.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ComplexCalculator.API.Hubs;
+using ComplexCalculator.API.HubExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,24 +36,18 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
-app.UseRouting();   
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    _ = endpoints.MapControllers();
-    _ = endpoints.MapHub<UserHub>("/userhub");
-    _ = endpoints.MapHub<ChatHub>("/chatHub");
-    _ = endpoints.MapHub<SyncDataHub>("/syncdataHub");
-    _ = endpoints.MapHub<DeleteLogOutUserDataHub>("/delete-logout-userdataHub");
+// Replace UseEndpoints with top-level route registrations
+app.MapControllers();
+app.MapHubEndpoints(); // Use the extension method here
 
-});
 // Call CreateRoles on app start
 //var serviceProvider = app.Services.CreateScope().ServiceProvider;
 //await CreateRoles(serviceProvider);
 app.Run();
-
 
 //async Task CreateRoles(IServiceProvider serviceProvider)
 //{

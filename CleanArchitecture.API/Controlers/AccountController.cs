@@ -12,6 +12,7 @@ using ComplexCalculator.Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 using ComplexCalculator.API.Hubs;
 using ComplexCalculator.Application.Contracts.Calculator;
+using System.Diagnostics;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -62,27 +63,28 @@ public class AccountController : ControllerBase
         var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
         if (result.Succeeded)
         {
+            //var stopwatch = Stopwatch.StartNew();
             var user = await _userManager.FindByEmailAsync(model.Email);       
          
-            // Record login time in the UserSessions table
+            //// Record login time in the UserSessions table
 
-            var session = new UserSession
-            {
-                UserId = user.Id,
-                LoginTime = DateTime.UtcNow
-            };
+            //var session = new UserSession
+            //{
+            //    UserId = user.Id,
+            //    LoginTime = DateTime.UtcNow
+            //};
            
-            var userInSession=_context.UserSessions.FirstOrDefault(x=>x.UserId == user.Id);
-            if (userInSession == null)
-            {
-                await _context.UserSessions.AddAsync(session);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                 _context.UserSessions.Update(session);
-                 _context.SaveChanges();
-            }
+            //var userInSession=_context.UserSessions.FirstOrDefault(x=>x.UserId == user.Id);
+            //if (userInSession == null)
+            //{
+            //    await _context.UserSessions.AddAsync(session);
+            //    await _context.SaveChangesAsync();
+            //}
+            //else
+            //{
+            //     _context.UserSessions.Update(session);
+            //     _context.SaveChanges();
+            //}
             // Get roles for the user
             var logInUser = new ApplicationUser
             {
@@ -103,7 +105,9 @@ public class AccountController : ControllerBase
             {
                 batchNo += 1;
             }
+            //stopwatch.Stop();
 
+            //var elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             Console.WriteLine(roles);
 
             return Ok(new { Result = "Login successful", User= new{UserId= user.Id, UserEmail=user.Email, Roles=roles, BatchNo=batchNo} });

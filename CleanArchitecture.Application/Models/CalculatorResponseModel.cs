@@ -8,6 +8,7 @@ namespace ComplexCalculator.Application.Models
 {
     public class CalculatorResponseModel
     {
+        public int? Id { get; set; }
 
         public int? Changci { get; set; }
         public int? Tongshu { get; set; }
@@ -37,6 +38,7 @@ namespace ComplexCalculator.Application.Models
         public string? AccumulatedRawData { get; set; }
         public float? WinOrLose { get; set; }
         public float? MainTube { get; set; }
+        public bool IsPrevious { get; set; } = false;
 
     }
 
