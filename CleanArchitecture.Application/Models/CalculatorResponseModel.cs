@@ -39,6 +39,7 @@ namespace ComplexCalculator.Application.Models
         public float? WinOrLose { get; set; }
         public float? MainTube { get; set; }
         public bool IsPrevious { get; set; } = false;
+        public bool? EndThread { get; set; } = false;
 
     }
 

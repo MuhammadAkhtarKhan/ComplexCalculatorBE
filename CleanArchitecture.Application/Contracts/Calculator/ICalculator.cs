@@ -11,6 +11,8 @@ namespace ComplexCalculator.Application.Contracts.Calculator
     {
        
         public Task<List<CalculatorResponseModel>> GetAll();
+        public Task<List<CalculatorResponseModel>> GetAllByGroupNo(int GroupNo);
+        public Task<List<CalculatorResponseModel>> GetAllEndThreadByGroupNo(int GroupNo);
         public Task<string> AddCalculation(CalculatorResponseModel calculatorModel);
         public Task<List<CalculatorResponseModel>> AddMultiple(List<CalculatorResponseModel> lstCalculations);
         public Task<string> DeleteAllByUserId(string UserId);

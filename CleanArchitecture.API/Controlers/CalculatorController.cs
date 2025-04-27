@@ -62,12 +62,26 @@ namespace ComplexCalculator.API.Controlers
             var result = await this._calculator.GetAll();
             return Ok(result);
         }
+        //write a get method to get all data by endThread   
+        [HttpGet(nameof(GetAllEndThreadByGroupNo))]
+        public async Task<IActionResult> GetAllEndThreadByGroupNo(int groupNo)
+        {
+            var result = await this._calculator.GetAllEndThreadByGroupNo(groupNo);
+            return Ok(result);
+        }
+
+        [HttpGet(nameof(GetAllByGroupNo))]
+        public async Task<IActionResult> GetAllByGroupNo(int groupNo)
+        {
+            var result = await this._calculator.GetAllByGroupNo(groupNo);
+            return Ok(result);
+        }
 
         //write a delete method to delete all data by userId
         [HttpDelete(nameof(DeleteAllByUserId))]
-        public async Task<IActionResult> DeleteAllByUserId(string UserId)
+        public async Task<IActionResult> DeleteAllByUserId(string userId)
         {
-            var result = await this._calculator.DeleteAllByUserId(UserId);
+            var result = await this._calculator.DeleteAllByUserId(userId);
             return Ok(result);
         }
 

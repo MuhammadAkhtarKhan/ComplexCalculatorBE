@@ -185,6 +185,18 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             var result = _context.Calculators.ToList();
             return Task.FromResult(_mapper.Map<List<CalculatorResponseModel>>(result));
         }
+        // write a method to get all data by EndThread is true  
+        public Task<List<CalculatorResponseModel>> GetAllEndThreadByGroupNo(int GroupNo)
+        {
+            var result = _context.Calculators.Where(c => c.EndThread == true && c.GroupNo==GroupNo).ToList();
+            return Task.FromResult(_mapper.Map<List<CalculatorResponseModel>>(result));
+        }
+        // write a method to get all data by EndThread is true  
+        public Task<List<CalculatorResponseModel>> GetAllByGroupNo(int GroupNo)
+        {
+            var result = _context.Calculators.Where(c =>c.GroupNo == GroupNo&& c.EndThread==false).ToList();
+            return Task.FromResult(_mapper.Map<List<CalculatorResponseModel>>(result));
+        }
         public async Task<CalculatorResponse> GetAllSum(string UserId, int VersionValue, int BatchNo)
         {
             CalculatorResponse calculatorResponse = new CalculatorResponse();
