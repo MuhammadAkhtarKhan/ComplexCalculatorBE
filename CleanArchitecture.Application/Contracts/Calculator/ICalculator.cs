@@ -10,18 +10,19 @@ namespace ComplexCalculator.Application.Contracts.Calculator
     public interface ICalculator
     {
        
-        public Task<List<CalculatorResponseModel>> GetAll();
+        //public Task<List<CalculatorResponseModel>> GetAll();
         public Task<List<CalculatorResponseModel>> GetAllByGroupNo(int GroupNo);
         public Task<List<CalculatorResponseModel>> GetAllEndThreadByGroupNo(int GroupNo);
-        public Task<string> AddCalculation(CalculatorResponseModel calculatorModel);
+        //public Task<string> AddCalculation(CalculatorResponseModel calculatorModel);
         public Task<List<CalculatorResponseModel>> AddMultiple(List<CalculatorResponseModel> lstCalculations);
         public Task<string> DeleteAllByUserId(string UserId);
+        public Task<string> DeleteById(int UserId);
         public Task<CalculatorResponseModel> GetLatest(string UserId);
         public Task<int> GetLatestBatchNo(string UserId);
         public Task<CalculatorResponse> GetAllSum(string UserId, int VersionValue, int BatchNo);
-        public Task<string> UpdateTongshu(string UserId, int VersionValue, int BatchNo, int Tongshu);
-        public Task<string> UpdateShutting(string UserId, int VersionValue, int BatchNo, int OpenValue);
-        public Task<string> UpdateGroupNo(string UserId, int VersionValue, int BatchNo, int GroupNo);
+        //public Task<string> UpdateTongshu(string UserId, int VersionValue, int BatchNo, int Tongshu);
+        //public Task<string> UpdateShutting(string UserId, int VersionValue, int BatchNo, int OpenValue);
+        //public Task<string> UpdateGroupNo(string UserId, int VersionValue, int BatchNo, int GroupNo);
        
     }
 }

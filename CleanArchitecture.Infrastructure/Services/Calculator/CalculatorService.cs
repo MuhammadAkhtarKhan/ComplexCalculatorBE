@@ -65,6 +65,27 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             }
             return "Data deleted successfully!";
         }
+        public async Task<string> DeleteById(int Id)
+        {
+            if (Id == null) { throw new ArgumentNullException(nameof(Id)); }
+            try
+            {
+                var result = await _context.Calculators
+                    .Where(c => c.Id == Id)
+                    .ToListAsync();
+                if (result.Count == 0)
+                {
+                    return "No record found!";
+                }
+                _context.Calculators.RemoveRange(result);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return "Data deleted successfully!";
+        }
         public async Task<List<CalculatorResponseModel>> AddMultiple(List<CalculatorResponseModel> lstCalculation)
         {
             if (lstCalculation == null || lstCalculation.Count <= 0)

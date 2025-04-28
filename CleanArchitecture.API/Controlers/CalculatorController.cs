@@ -34,12 +34,7 @@ namespace ComplexCalculator.API.Controlers
             return Ok(new { BatchNo = result });
         }
 
-        [HttpPost(nameof(AddData))]
-        public async Task<IActionResult> AddData([FromBody] CalculatorResponseModel calculatorModel)
-        {
-            var result = await this._calculator.AddCalculation(calculatorModel);
-            return Ok(result);
-        }
+    
 
         [HttpPost(nameof(AddMultiple))]
         public async Task<IActionResult> AddMultiple([FromBody] List<CalculatorResponseModel> calculatorModel)
@@ -55,13 +50,7 @@ namespace ComplexCalculator.API.Controlers
             return Ok(result);
         }
 
-        //write a get method to get all data
-        [HttpGet(nameof(GetAll))]
-        public async Task<IActionResult> GetAll()
-        {
-            var result = await this._calculator.GetAll();
-            return Ok(result);
-        }
+     
         //write a get method to get all data by endThread   
         [HttpGet(nameof(GetAllEndThreadByGroupNo))]
         public async Task<IActionResult> GetAllEndThreadByGroupNo(int groupNo)
@@ -85,33 +74,20 @@ namespace ComplexCalculator.API.Controlers
             return Ok(result);
         }
 
+        [HttpDelete(nameof(DeleteById))]
+        public async Task<IActionResult> DeleteById(int id)
+        {
+            var result = await this._calculator.DeleteById(id);
+            return Ok(result);
+        }
+
         [HttpGet("GetAllSum/{UserId}/{VersionValue}/{BatchNo}")]
         public async Task<IActionResult> GetAllSum(string UserId, int VersionValue, int BatchNo)
         {
             var result = await this._calculator.GetAllSum(UserId, VersionValue, BatchNo);
             return Ok(result);
-        }
+        }  
 
-        [HttpPut("UpdateTongshu/{UserId}/{VersionValue}/{BatchNo}")]
-        public async Task<IActionResult> UpdateTongshu(string UserId, int VersionValue, int BatchNo, int Tongshu)
-        {
-            var result = await this._calculator.UpdateTongshu(UserId, VersionValue, BatchNo, Tongshu);
-            return Ok(result);
-        }
-
-        [HttpPut("UpdateShutting/{UserId}/{VersionValue}/{BatchNo}")]
-        public async Task<IActionResult> UpdateShutting(string UserId, int VersionValue, int BatchNo, int OpenValue)
-        {
-            var result = await this._calculator.UpdateShutting(UserId, VersionValue, BatchNo, OpenValue);
-            return Ok(result);
-        }
-
-        [HttpPut("UpdateGroupNo/{UserId}/{VersionValue}/{BatchNo}")]
-        public async Task<IActionResult> UpdateGroupNo(string UserId, int VersionValue, int BatchNo, int GroupNo)
-        {
-            var result = await this._calculator.UpdateGroupNo(UserId, VersionValue, BatchNo, GroupNo);
-            return Ok(result);
-        }
 
     }
 }
