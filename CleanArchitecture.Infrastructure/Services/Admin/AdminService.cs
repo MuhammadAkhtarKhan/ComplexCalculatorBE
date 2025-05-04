@@ -30,7 +30,40 @@ namespace ComplexCalculator.Infrastructure.Services.Admin
             this._mapper = mapper;
             this._connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        public async Task<SummaryAndAdminCalculationsResponse> GetSummaryAndDataByGroupNo(int GroupNo)
+
+        public async Task<TotalScoreBoradModelResponse> GetDataTotalScoreBoardByGroupNoAndTipMode(int groupNo, int tipMode)
+        {
+            var response = new TotalScoreBoradModelResponse();
+
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            // Execute the query and get the GridReader
+            var multi = await connection.QueryMultipleAsync(
+                "EXEC dbo.spGetDataTotalScoreBoard @GroupNo , @TipMode",
+                new { GroupNo = groupNo, TipMode=tipMode }
+            );
+
+            try
+            {
+                // Read multiple-row admin calculations
+                response.LstScoreBoardGrid = (await multi.ReadAsync<ScoreBoardGrid>()).ToList();
+                
+                // Read single-row summary grid data
+                response.ScoreBoardTotal = await multi.ReadFirstOrDefaultAsync<ScoreBoardTotal>();
+                               
+            }
+            finally
+            {
+                // Explicitly dispose of the GridReader after all data is read
+                multi.Dispose();
+            }
+
+            return response;
+       
+        }
+
+        public async Task<SummaryAndAdminCalculationsResponse> GetAdminSummaryAndDataByGroupNoAndTipMode(int groupNo, int? tipMode=5000)
         {
             var newList = new SummaryAndAdminCalculationsResponse();
 
@@ -39,8 +72,8 @@ namespace ComplexCalculator.Infrastructure.Services.Admin
 
             // Execute the query and get the GridReader
             var multi = await connection.QueryMultipleAsync(
-                "EXEC dbo.GetSummaryAndGridDataByGroupNo @GroupNo",
-                new { GroupNo = GroupNo }
+                "EXEC dbo.GetSummaryAndGridDataByGroupNo @GroupNo, @TipMode",
+                new { GroupNo = groupNo, TipMode=tipMode }
             );
 
             try

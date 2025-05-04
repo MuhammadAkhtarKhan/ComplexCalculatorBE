@@ -9,6 +9,7 @@ namespace ComplexCalculator.Application.Contracts.Admin
 {
     public interface IAdmin
     {
-        public Task<SummaryAndAdminCalculationsResponse> GetSummaryAndDataByGroupNo(int GroupNo);
+        public Task<SummaryAndAdminCalculationsResponse> GetAdminSummaryAndDataByGroupNoAndTipMode(int groupNo,int? tipMode);
+        public Task<TotalScoreBoradModelResponse> GetDataTotalScoreBoardByGroupNoAndTipMode(int groupNo, int tipMode);
     }
 }

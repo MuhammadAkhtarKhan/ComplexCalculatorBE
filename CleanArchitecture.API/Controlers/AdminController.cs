@@ -14,10 +14,17 @@ namespace ComplexCalculator.API.Controlers
             this._admin = admin;
         }
 
-        [HttpGet("GetSummayAndDataByGroupNo/{GroupNo}")]
-        public async Task<IActionResult> GetSummayAndDataByGroupNo(int GroupNo)
+        [HttpGet("GetAdminSummaryAndDataByGroupNoAndTipMode")]
+        public async Task<IActionResult> GetAdminSummaryAndDataByGroupNoAndTipMode(int groupNo, int? tipMode=5000)
         {
-            var result = await this._admin.GetSummaryAndDataByGroupNo(GroupNo);
+            var result = await this._admin.GetAdminSummaryAndDataByGroupNoAndTipMode(groupNo,tipMode);
+            return Ok(result);
+        }
+
+        [HttpGet("GetDataTotalScoreBoardByGroupNoAndTipMode")]
+        public async Task<IActionResult> GetDataTotalScoreBoardByGroupNoAndTipMode(int groupNo, int tipMode)
+        {
+            var result = await this._admin.GetDataTotalScoreBoardByGroupNoAndTipMode(groupNo,tipMode);
             return Ok(result);
         }
     }
