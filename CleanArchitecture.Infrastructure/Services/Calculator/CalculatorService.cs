@@ -146,59 +146,59 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             }
         }
 
-        //public async Task<List<CalculatorResponseModel>> AddMultiple(List<CalculatorResponseModel> lstCalculation)
-        //{
-        //    if (lstCalculation == null || lstCalculation.Count <= 0)
-        //        throw new ArgumentNullException(nameof(lstCalculation));
+        public async Task<List<TempCalculatorResponseModel>> AddTempCalculator(TempCalculatorResponseModel calc)
+        {
+            try
+            {
+                // 1. Map and add the new calculator
+                TempCalculator newCalculation = _mapper.Map<TempCalculator>(calc);
+                await _context.TempCalculators.AddAsync(newCalculation);
+                await _context.SaveChangesAsync();
 
-        //    var resultList = new List<Calculator>();
+                // 2. Get the complete list of temp calculators (or filtered list if needed)
+                List<TempCalculator> allCalculations = await _context.TempCalculators.ToListAsync();
 
-        //    try
-        //    {
-        //        List<Calculator> calculations = _mapper.Map<List<Calculator>>(lstCalculation);
+                // 3. Map the list to response models and return
+                return _mapper.Map<List<TempCalculatorResponseModel>>(allCalculations);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in AddTempCalculator: {ex.Message}");
+            }
+        }
+         public async Task<List<TempCalculatorResponseModel>> GetAllTempCalculatorByGroupNo(int groupNo)
+        {
+            try
+            {                
+                List<TempCalculator> allCalculations = await _context.TempCalculators.ToListAsync();
+                // 3. Map the list to response models and return
+                return _mapper.Map<List<TempCalculatorResponseModel>>(allCalculations);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in GetAllTempCalculatorByGroupNo: {ex.Message}");
+            }
+        }
 
-        //        foreach (Calculator calc in calculations)
-        //        {
-        //            // Check by UserId and Id
-        //            var existingCalc = await _context.Calculators
-        //                .FirstOrDefaultAsync(c => c.UserId == calc.UserId && c.Id == calc.Id);
+        public async Task DeleteTempCalculator(TempCalculatorResponseModel calculator)
+        {
+            try
+            {
+                // Find the existing entity by its primary key
+                var existingEntity = await _context.TempCalculators
+                    .FindAsync(calculator.Id); // Use the correct primary key property
 
-        //            if (existingCalc != null)
-        //            {
-        //                // Update existing entry
-        //                existingCalc.Tongshu = calc.Tongshu;
-        //                existingCalc.InputByUser = calc.InputByUser;
-        //                existingCalc.GroupNo = calc.GroupNo;
-        //                existingCalc.Changci = calc.Changci;
-        //                existingCalc.Shutting = calc.Shutting;
-        //                existingCalc.EndThread = calc.EndThread;
-        //                existingCalc.WinOrLose = calc.WinOrLose;
-        //                existingCalc.MainTube = calc.MainTube;
-        //                existingCalc.IsPrevious = true;
-
-        //                resultList.Add(existingCalc);
-        //            }
-        //            else
-        //            {
-        //                // Add new entry
-        //                calc.CreatedOn = DateTime.Now;
-        //                calc.Changci = 1;
-
-        //                await _context.Calculators.AddAsync(calc);
-        //                resultList.Add(calc);
-        //            }
-        //        }
-
-        //        await _context.SaveChangesAsync();
-
-        //        // Map back to response model to return
-        //        return _mapper.Map<List<CalculatorResponseModel>>(resultList);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception($"Error in AddMultiple: {ex.Message}");
-        //    }
-        //}
+                if (existingEntity != null)
+                {
+                    _context.TempCalculators.Remove(existingEntity);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in DeleteTempCalculator: {ex.Message}");
+            }
+        }
 
 
         public Task<List<CalculatorResponseModel>> GetAll()
@@ -209,22 +209,22 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
         // write a method to get all data by EndThread is true  
         public Task<List<CalculatorResponseModel>> GetAllEndThreadByGroupNo(int GroupNo)
         {
-            var result = _context.Calculators.Where(c => c.EndThread == true && c.GroupNo==GroupNo).ToList();
+            var result = _context.Calculators.Where(c => c.EndThread == true && c.GroupNo == GroupNo).ToList();
             return Task.FromResult(_mapper.Map<List<CalculatorResponseModel>>(result));
         }
         // write a method to get all data by EndThread is true  
         public Task<List<CalculatorResponseModel>> GetAllByGroupNo(int GroupNo)
         {
-            var result = _context.Calculators.Where(c =>c.GroupNo == GroupNo&& c.EndThread==false).ToList();
+            var result = _context.Calculators.Where(c => c.GroupNo == GroupNo && c.EndThread == false).ToList();
             return Task.FromResult(_mapper.Map<List<CalculatorResponseModel>>(result));
         }
         public async Task<CalculatorResponse> GetAllSum(string UserId, int VersionValue, int BatchNo)
         {
             CalculatorResponse calculatorResponse = new CalculatorResponse();
             List<CalculatorSumModel> calculatorSumModelsList = new List<CalculatorSumModel>();
-          
+
             var result = await _context.Calculators
-                  .Where(c => c.UserId == UserId && c.Version==VersionValue && c.BatchNo==BatchNo) // Filter by UserId
+                  .Where(c => c.UserId == UserId && c.Version == VersionValue && c.BatchNo == BatchNo) // Filter by UserId
                   .GroupBy(t => t.UserId)
                              .Select(t => new
                              {
@@ -241,13 +241,13 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             {
                 calculatorSumModelsList.Add(new CalculatorSumModel
                 {
-                    One = item.One,
-                    Two = item.Two,
-                    Three = item.Three,
-                    Four = item.Four,
-                    Five = item.Five,
-                    Six = item.Six,
-                    Luozi = item.Luozi
+                    One = item.One ?? 0,
+                    Two = item.Two ?? 0,
+                    Three = item.Three ?? 0,
+                    Four = item.Four ?? 0,
+                    Five = item.Five ?? 0,
+                    Six = item.Six ?? 0,
+                    Luozi = item.Luozi ?? 0
                 });
             }
 
@@ -258,110 +258,18 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
                               Name = t.Name,
                               IdentifiedData = t.IdentifiedData,
                               Changci = t.Changci,
-                              Tongshu = t.Tongshu                             
+                              Tongshu = t.Tongshu
                           }).ToListAsync();
-            
+
             calculatorResponse.calculatorResponse = calculatorSumModelsList;
-            calculatorResponse.gridCalculatorModel=resultRecords;
+            calculatorResponse.gridCalculatorModel = resultRecords;
 
             //List<CalculatorSumModel> calculatorRes = _mapper.Map<List<CalculatorSumModel>>(calculatorList);
 
             return calculatorResponse;
 
         }
-          public async Task<string> UpdateTongshu(string UserId, int VersionValue, int BatchNo, int Tongshu)
-        {
-
-            try
-            {
-                var result = await _context.Calculators
-                                 .Where(c => c.UserId == UserId && c.Version == VersionValue && c.BatchNo == BatchNo).ToListAsync(); // Filter by UserId
-
-                // Update the Tongshu value for each item in the result
-                if (result.Count == 0)
-                {
-                    return " No record found!";
-                }
-                foreach (var item in result)
-                {
-                    item.Tongshu = Tongshu;
-                }
-
-                // Save the changes to the database
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-           
-
-            return "Data Updated Successfully!";
-
-        }
-         public async Task<string> UpdateShutting(string UserId, int VersionValue, int BatchNo, int OpentValue)
-        {
-
-            try
-            {
-                var result = await _context.Calculators
-                                 .Where(c => c.UserId == UserId && c.Version == VersionValue && c.BatchNo == BatchNo).ToListAsync(); // Filter by UserId
-
-                // Update the Tongshu value for each item in the result
-                if (result.Count == 0)
-                {
-                    return " No record found!";
-                }
-                foreach (var item in result)
-                {
-                    item.Shutting = OpentValue;
-                }
-
-                // Save the changes to the database
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-           
-
-            return "Shutting updated successfully!";
-
-        }
-        public async Task<string> UpdateGroupNo(string UserId, int VersionValue, int BatchNo, int GroupNo)
-        {
-
-            try
-            {
-                var result = await _context.Calculators
-                                 .Where(c => c.UserId == UserId && c.Version == VersionValue && c.BatchNo == BatchNo)
-                                 .ToListAsync();
-
-                if (result.Count == 0)
-                {
-                    return " No record found!";
-                }
-                foreach (var item in result)
-                {
-                    item.GroupNo = GroupNo;
-                }
-
-                // Save the changes to the database
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-           
-
-            return "Group number updated successfully!";
-
-        }
+     
 
         public async Task<CalculatorResponseModel> GetLatest(string UserId)
         {
@@ -401,14 +309,14 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             }
 
             var latestBatchNo = await _context.Calculators
-                            .Where(c => c.UserId == UserId)
-                            .OrderByDescending(c => c.BatchNo)
-                            .Select(c => c.BatchNo)
-                            .FirstOrDefaultAsync();
+                                .Where(c => c.UserId == UserId)
+                                .OrderByDescending(c => c.BatchNo)
+                                .Select(c => c.BatchNo)
+                                .FirstOrDefaultAsync();
 
-            return latestBatchNo;
-
+            return latestBatchNo ?? 0; // Use null-coalescing operator to handle nullable int  
         }
 
+       
     }
 }

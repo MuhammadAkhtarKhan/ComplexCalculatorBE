@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using ComplexCalculator.Application.Contracts.Calculator;
 using ComplexCalculator.Application.Models;
 using System.Diagnostics;
+using ComplexCalculator.Domain.Entities;
 
 namespace ComplexCalculator.API.Controlers
 {
@@ -79,6 +80,27 @@ namespace ComplexCalculator.API.Controlers
         {
             var result = await this._calculator.DeleteById(id);
             return Ok(result);
+        }
+        // write method for AddTempCalculator   
+
+        [HttpPost(nameof(AddTempCalculator))]
+        public async Task<IActionResult> AddTempCalculator(TempCalculatorResponseModel calculator)
+        {
+           var result = await _calculator.AddTempCalculator(calculator);
+            return Ok(result);
+        }
+           [HttpGet(nameof(GetAllTempCalculatorByGroupNo))]
+        public async Task<IActionResult> GetAllTempCalculatorByGroupNo(int groupNo)
+        {
+           var result = await _calculator.GetAllTempCalculatorByGroupNo(groupNo);
+            return Ok(result);
+        }
+
+        [HttpDelete(nameof(DeleteTempCalculator))]
+        public async Task<IActionResult> DeleteTempCalculator(TempCalculatorResponseModel calculator)
+        {
+            await _calculator.DeleteTempCalculator(calculator);
+            return Ok();
         }
 
         [HttpGet("GetAllSum/{UserId}/{VersionValue}/{BatchNo}")]

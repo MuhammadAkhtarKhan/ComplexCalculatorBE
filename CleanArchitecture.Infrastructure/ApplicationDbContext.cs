@@ -22,6 +22,7 @@ namespace ComplexCalculator.Infrastructure
         // Add a DbSet for
         public DbSet<UserSession> UserSessions { get; set; }
         public DbSet<Calculator> Calculators { get; set; }
+        public DbSet<TempCalculator> TempCalculators { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
