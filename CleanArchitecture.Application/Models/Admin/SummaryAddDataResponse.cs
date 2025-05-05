@@ -10,8 +10,7 @@ namespace ComplexCalculator.Application.Models.Admin
     {
         public CalculatorSumModel? Summary { get; set; }
         public List<AdminCalculations>? Calculations { get; set; }
-        public SummaryGridPannel? SummaryGrid { get; set; }
-        public List<GroupDropDown>? Groups { get; set; }
+        public SummaryGridPannel? SummaryGrid { get; set; }       
 
     }
 

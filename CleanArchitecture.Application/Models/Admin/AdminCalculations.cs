@@ -12,7 +12,7 @@
         public int Five { get; set; }
         public int Six { get; set; }  
         public int Luozi { get; set; }
-        public string? UserId { get; set; }    
+        public string UserId { get; set; } = string.Empty;    
         public int Version { get; set; }       
         public int? GroupNo { get; set; }
         public int? Shutting { get; set; }

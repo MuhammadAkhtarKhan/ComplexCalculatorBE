@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ComplexCalculator.Application.Models;
+using ComplexCalculator.Application.Models.Admin;
 using ComplexCalculator.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace ComplexCalculator.Application.MappingProfiles
             CreateMap<Calculator, GridCalculatorModel>();
             CreateMap<CalculatorSumModel, CalculatorResponse>();
             CreateMap<TempCalculatorResponseModel, TempCalculator>().ReverseMap();
+            CreateMap<AdminCalculations, Calculator>().ReverseMap();
             //CreateMap<CreateLeaveTypeCommand, LeaveType>();
             //CreateMap<UpdateLeaveTypeCommand, LeaveType>();
         }

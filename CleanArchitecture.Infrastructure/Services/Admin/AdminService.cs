@@ -87,8 +87,7 @@ namespace ComplexCalculator.Infrastructure.Services.Admin
                 // Read multiple-row admin calculations
                 newList.Calculations = (await multi.ReadAsync<AdminCalculations>()).ToList();
 
-                // Read groups for drop down
-                newList.Groups = (await multi.ReadAsync<GroupDropDown>())?.ToList() ?? new List<GroupDropDown>();
+                
             }
             finally
             {
