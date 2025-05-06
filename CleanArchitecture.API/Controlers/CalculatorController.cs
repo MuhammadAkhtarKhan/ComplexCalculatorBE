@@ -83,10 +83,10 @@ namespace ComplexCalculator.API.Controlers
         }
         // write method for AddTempCalculator   
 
-        [HttpPost(nameof(AddTempCalculator))]
-        public async Task<IActionResult> AddTempCalculator(TempCalculatorResponseModel calculator)
+        [HttpPost(nameof(AddOrUpdateTempCalculator))]
+        public async Task<IActionResult> AddOrUpdateTempCalculator(TempCalculatorResponseModel calculator)
         {
-           var result = await _calculator.AddTempCalculator(calculator);
+           var result = await _calculator.AddOrUpdateTempCalculator(calculator);
             return Ok(result);
         }
            [HttpGet(nameof(GetAllTempCalculatorByGroupNo))]
@@ -97,10 +97,16 @@ namespace ComplexCalculator.API.Controlers
         }
 
         [HttpDelete(nameof(DeleteTempCalculator))]
-        public async Task<IActionResult> DeleteTempCalculator(TempCalculatorResponseModel calculator)
+        public async Task<IActionResult> DeleteTempCalculator(int id)
         {
-            await _calculator.DeleteTempCalculator(calculator);
-            return Ok();
+           var res= await _calculator.DeleteTempCalculator(id);
+            return Ok(res);
+        }
+         [HttpDelete(nameof(DeleteTempCalculatorByUserId))]
+        public async Task<IActionResult> DeleteTempCalculatorByUserId(string userId)
+        {
+           var res= await _calculator.DeleteTempCalculatorByUserId(userId);
+            return Ok(res);
         }
 
         [HttpGet("GetAllSum/{UserId}/{VersionValue}/{BatchNo}")]

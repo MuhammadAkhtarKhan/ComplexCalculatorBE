@@ -14,8 +14,9 @@ namespace ComplexCalculator.Application.Contracts.Calculator
         public Task<List<CalculatorResponseModel>> GetAllByGroupNo(int GroupNo);
         public Task<List<CalculatorResponseModel>> GetAllEndThreadByGroupNo(int GroupNo);        
         public Task<List<CalculatorResponseModel>> AddMultiple(List<CalculatorResponseModel> lstCalculations);
-        public Task<List<TempCalculatorResponseModel>> AddTempCalculator(TempCalculatorResponseModel calculator);
-        public Task  DeleteTempCalculator(TempCalculatorResponseModel calculator);
+        public Task<List<TempCalculatorResponseModel>> AddOrUpdateTempCalculator(TempCalculatorResponseModel calculator);
+        public Task<string>  DeleteTempCalculator(int id);
+        public Task<string>  DeleteTempCalculatorByUserId(string userId);
         public Task<List<TempCalculatorResponseModel>> GetAllTempCalculatorByGroupNo(int groupNo);
         public Task<string> DeleteAllByUserId(string UserId);
         public Task<string> DeleteById(int UserId);

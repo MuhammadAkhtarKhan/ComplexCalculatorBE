@@ -28,6 +28,7 @@ namespace ComplexCalculator.Application.Models
         public int? BatchNo { get; set; }
         public int? GroupNo { get; set; }
         public int? Shutting { get; set; }
+        public int? SmallTable { get; set; } = 0;
         public float? WinOrLose { get; set; } = 0;
         public float? MainTube { get; set; } = 0;
         public bool? EndThread { get; set; } = false;

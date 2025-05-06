@@ -146,31 +146,43 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             }
         }
 
-        public async Task<List<TempCalculatorResponseModel>> AddTempCalculator(TempCalculatorResponseModel calc)
+        public async Task<List<TempCalculatorResponseModel>> AddOrUpdateTempCalculator(TempCalculatorResponseModel calc)
         {
             try
             {
-                // 1. Map and add the new calculator
-                TempCalculator newCalculation = _mapper.Map<TempCalculator>(calc);
-                await _context.TempCalculators.AddAsync(newCalculation);
+                // Check if the record exists (based on Id or other unique field)
+                var existing = await _context.TempCalculators.FirstOrDefaultAsync(x => x.Id == calc.Id);
+
+                if (existing != null)
+                {
+                    // Update existing entity
+                    _mapper.Map(calc, existing); // Map new values onto existing entity
+                    _context.TempCalculators.Update(existing); // Optional, EF tracks changes
+                }
+                else
+                {
+                    // Add new entity
+                    TempCalculator newCalculation = _mapper.Map<TempCalculator>(calc);
+                    await _context.TempCalculators.AddAsync(newCalculation);
+                }
+
                 await _context.SaveChangesAsync();
 
-                // 2. Get the complete list of temp calculators (or filtered list if needed)
-                List<TempCalculator> allCalculations = await _context.TempCalculators.ToListAsync();
-
-                // 3. Map the list to response models and return
+                // Return full list
+                var allCalculations = await _context.TempCalculators.ToListAsync();
                 return _mapper.Map<List<TempCalculatorResponseModel>>(allCalculations);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error in AddTempCalculator: {ex.Message}");
+                throw new Exception($"Error in AddOrUpdateTempCalculator: {ex.Message}");
             }
         }
-         public async Task<List<TempCalculatorResponseModel>> GetAllTempCalculatorByGroupNo(int groupNo)
+
+        public async Task<List<TempCalculatorResponseModel>> GetAllTempCalculatorByGroupNo(int groupNo)
         {
             try
             {                
-                List<TempCalculator> allCalculations = await _context.TempCalculators.ToListAsync();
+                List<TempCalculator> allCalculations = await _context.TempCalculators.Where(x=>x.GroupNo==groupNo).ToListAsync();
                 // 3. Map the list to response models and return
                 return _mapper.Map<List<TempCalculatorResponseModel>>(allCalculations);
             }
@@ -180,24 +192,49 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             }
         }
 
-        public async Task DeleteTempCalculator(TempCalculatorResponseModel calculator)
+        public async Task<string> DeleteTempCalculator(int id)
         {
+            if (id == null) { throw new ArgumentNullException(nameof(id)); }
+            string res = "";
             try
             {
                 // Find the existing entity by its primary key
                 var existingEntity = await _context.TempCalculators
-                    .FindAsync(calculator.Id); // Use the correct primary key property
+                    .FindAsync(id); // Use the correct primary key property
 
                 if (existingEntity != null)
                 {
                     _context.TempCalculators.Remove(existingEntity);
                     await _context.SaveChangesAsync();
+                    res = "Deleted";
                 }
+                return res;
             }
             catch (Exception ex)
             {
                 throw new Exception($"Error in DeleteTempCalculator: {ex.Message}");
             }
+        }
+        public async Task<string> DeleteTempCalculatorByUserId(string userId)
+        {
+            if (userId == null) { throw new ArgumentNullException(nameof(userId)); }
+            try
+            {
+                var result = await _context.TempCalculators
+                    .Where(c => c.UserId == userId)
+                    .ToListAsync();
+                if (result.Count == 0)
+                {
+                    return "No record found!";
+                }
+                _context.TempCalculators.RemoveRange(result);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return "Data deleted successfully!";
         }
 
 
