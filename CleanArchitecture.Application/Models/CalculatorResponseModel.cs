@@ -40,6 +40,7 @@ namespace ComplexCalculator.Application.Models
         public float? MainTube { get; set; }
         public bool IsPrevious { get; set; } = false;
         public bool? EndThread { get; set; } = false;
+        public int EntryNo { get; set; }
 
     }
 

@@ -15,7 +15,7 @@ namespace ComplexCalculator.Application.Models
 
         [MaxLength(100, ErrorMessage = "Only allow max 100 characters")]
         public string? Name { get; set; } = null;
-        public string InputByUser { get; set; } = null;
+        public string? InputByUser { get; set; } = null;
         public int? One { get; set; } = 0;
         public int? Two { get; set; } = 0;
         public int? Three { get; set; } = 0;

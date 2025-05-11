@@ -56,6 +56,7 @@ namespace ComplexCalculator.Domain.Entities
         public bool? IsError { get; set; } = false;
         public bool IsPrevious { get; set; } = false;
         public bool? EndThread { get; set; } = false;
+        public int EntryNo { get; set; }
 
     }
 }
