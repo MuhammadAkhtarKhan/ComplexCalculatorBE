@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.SignalR;
 using ComplexCalculator.API.Hubs;
 using ComplexCalculator.Application.Contracts.Calculator;
 using System.Diagnostics;
+using ComplexCalculator.Infrastructure.JWT;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -24,13 +25,14 @@ public class AccountController : ControllerBase
     private readonly ApplicationDbContext _context;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ICalculator _calculator;
+    private readonly IJwtTokenService _jwtTokenService;
 
     public AccountController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         ApplicationDbContext context,
-        RoleManager<IdentityRole> roleManager
-,
+        RoleManager<IdentityRole> roleManager,
+        IJwtTokenService jwtTokenService,
         ICalculator calculator
         )
     {
@@ -39,6 +41,7 @@ public class AccountController : ControllerBase
         this._context = context;
         this._roleManager = roleManager;
         _calculator = calculator;
+        _jwtTokenService = jwtTokenService;
     }
 
     [HttpPost("register")]
@@ -57,75 +60,42 @@ public class AccountController : ControllerBase
         return BadRequest(result.Errors);
     }
 
+   
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
         var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
         if (result.Succeeded)
         {
-            //var stopwatch = Stopwatch.StartNew();
-            var user = await _userManager.FindByEmailAsync(model.Email);       
-         
-            //// Record login time in the UserSessions table
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            var roles = await _userManager.GetRolesAsync(user);
+            var batchNo = await _calculator.GetLatestBatchNo(user.Id);
+            batchNo = batchNo == 0 ? 1 : batchNo + 1;
 
-            //var session = new UserSession
-            //{
-            //    UserId = user.Id,
-            //    LoginTime = DateTime.UtcNow
-            //};
-           
-            //var userInSession=_context.UserSessions.FirstOrDefault(x=>x.UserId == user.Id);
-            //if (userInSession == null)
-            //{
-            //    await _context.UserSessions.AddAsync(session);
-            //    await _context.SaveChangesAsync();
-            //}
-            //else
-            //{
-            //     _context.UserSessions.Update(session);
-            //     _context.SaveChanges();
-            //}
-            // Get roles for the user
-            var logInUser = new ApplicationUser
+            var token = _jwtTokenService.GenerateToken(user, roles);
+
+            return Ok(new
             {
-                Email = user.Email,
-                PasswordHash = user.PasswordHash,
-                Id = user.Id,
-                UserName = user.UserName,
-
-            };
-            
-            var roles = await _userManager.GetRolesAsync(logInUser);
-            var batchNo= await _calculator.GetLatestBatchNo(user.Id);
-            if (batchNo==0)
-            {
-                batchNo = 1;
-            }
-            else
-            {
-                batchNo += 1;
-            }
-            //stopwatch.Stop();
-
-            //var elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-            Console.WriteLine(roles);
-
-            return Ok(new { Result = "Login successful", User= new{UserId= user.Id, UserEmail=user.Email, Roles=roles, BatchNo=batchNo} });
+                Token = token,
+                User = new
+                {
+                    UserId = user.Id,
+                    UserEmail = user.Email,
+                    Roles = roles,
+                    BatchNo = batchNo
+                }
+            });
         }
+
         return Unauthorized();
     }
 
-   
+
+
     [HttpGet("logout")]
     public async Task<IActionResult> Logout(string userEmail)
     {
-        //var userEmailFromIdentity = User?.Identity?.Name;
-
-        //if (userEmail == null)
-        //{
-        //    return BadRequest(new { Result = "No user is currently logged in." });
-        //}
-
+        
         var user = await _userManager.FindByEmailAsync(userEmail);
 
         // Find the latest session with no LogoutTime (i.e., the active session)

@@ -41,14 +41,14 @@ namespace ComplexCalculator.Application.Models.Admin
 
     public class ScoreBoardTotal
     {
-        public int One { get; set; } = 0;
-        public int Two { get; set; } = 0;
-        public int Three { get; set; } = 0;
-        public int Four { get; set; } = 0;
-        public int Five { get; set; } = 0;
-        public int Six { get; set; } = 0;
+        public float One { get; set; } = 0;
+        public float Two { get; set; } = 0;
+        public float Three { get; set; } = 0;
+        public float Four { get; set; } = 0;
+        public float Five { get; set; } = 0;
+        public float Six { get; set; } = 0;
         public float TotalMainTube { get; set; } = 0;
-        public int TotalLuozi { get; set; } = 0;
+        public float TotalLuozi { get; set; } = 0;
         public float TotalSmallTable { get; set; } = 0;      
         public float TotalWinOrLose { get; set; } = 0;      
         public int TotalCurrentlyOnlineUsers { get; set; } = 0;
