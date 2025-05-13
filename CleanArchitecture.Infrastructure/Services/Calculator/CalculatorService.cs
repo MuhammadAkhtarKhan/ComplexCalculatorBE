@@ -121,6 +121,24 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
                         existing.EndThread = calc.EndThread;
                         existing.WinOrLose = calc.WinOrLose;
                         existing.MainTube = calc.MainTube;
+                        existing.A = calc.A;
+                        existing.B = calc.B;
+                        existing.C = calc.C;
+                        existing.D = calc.D;
+                        existing.E = calc.E;
+                        existing.One = calc.One;
+                        existing.Two = calc.Two;
+                        existing.Three = calc.Three;
+                        existing.Four = calc.Four;
+                        existing.Five = calc.Five;
+                        existing.Six = calc.Six;
+                        existing.Luozi = calc.Luozi;
+                        existing.Format = calc.Format;
+                        existing.EntryNo = calc.EntryNo;
+                        existing.RawData = calc.RawData;
+                        existing.IdentifiedData = calc.IdentifiedData;
+                        existing.AccumulatedRawData = calc.AccumulatedRawData;
+
                         existing.IsPrevious = true;
 
                         resultList.Add(existing);
