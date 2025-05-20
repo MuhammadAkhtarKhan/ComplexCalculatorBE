@@ -22,5 +22,5 @@
         public float? SmallTable { get; set; }
     }
 
-   
+
 }

@@ -26,6 +26,12 @@ namespace ComplexCalculator.API.Controlers
         {
             var result = await this._admin.GetDataTotalScoreBoardByGroupNoAndTipMode(groupNo,tipMode);
             return Ok(result);
+        } 
+        [HttpGet("GetDataPerRoundByGroupNoAndTipMode")]
+        public async Task<IActionResult> GetDataPerRoundByGroupNoAndTipMode(int groupNo, int tipMode)
+        {
+            var result = await this._admin.GetDataPerRoundByGroupNoAndTipMode(groupNo,tipMode);
+            return Ok(result);
         }
     }
 }

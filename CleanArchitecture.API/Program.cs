@@ -20,11 +20,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-
+// Add CORS services and configure policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDevClient",
+        policy => policy
+            .WithOrigins(["http://localhost:4200", "http://121.37.227.251:8080"])  // Frontend origin to allow
+            .AllowAnyMethod()                       // Allow all HTTP methods (GET, POST, etc.)
+            .AllowAnyHeader()                       // Allow any headers (Authorization, Content-Type, etc.)
+            .AllowCredentials());                   // If you want to send cookies/auth info
+});
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+app.UseCors("AllowAngularDevClient");
 
 if (app.Environment.IsDevelopment())
 {
