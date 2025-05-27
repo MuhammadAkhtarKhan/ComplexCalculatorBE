@@ -25,7 +25,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularDevClient",
         policy => policy
-            .WithOrigins(["http://localhost:4200", "http://121.37.227.251:8080"])  // Frontend origin to allow
+            .WithOrigins(["http://localhost:4200", "http://121.37.227.251:8080", "http://47.239.123.32:8080", "http://47.239.123.32:8050"])  // Frontend origin to allow
             .AllowAnyMethod()                       // Allow all HTTP methods (GET, POST, etc.)
             .AllowAnyHeader()                       // Allow any headers (Authorization, Content-Type, etc.)
             .AllowCredentials());                   // If you want to send cookies/auth info

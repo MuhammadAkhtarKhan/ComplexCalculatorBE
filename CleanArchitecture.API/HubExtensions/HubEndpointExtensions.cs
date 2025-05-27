@@ -9,8 +9,8 @@ namespace ComplexCalculator.API.HubExtensions
             endpoints.MapHub<UserHub>("/userhub");
             endpoints.MapHub<ChatHub>("/chatHub");
             endpoints.MapHub<SyncDataHub>("/syncdataHub");
-            endpoints.MapHub<DeleteLogOutUserDataHub>("/delete-logout-userdataHub");
             endpoints.MapHub<GroupAndOpenSelectHub>("/groupAndOpenHub");
+            endpoints.MapHub<DeleteLogOutUserDataHub>("/delete-logout-userdataHub");
             endpoints.MapHub<GroupNoAndUserInputHub>("/groupNoAndUserInput");
         }
     }

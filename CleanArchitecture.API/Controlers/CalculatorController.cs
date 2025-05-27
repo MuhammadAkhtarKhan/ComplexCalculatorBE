@@ -75,6 +75,14 @@ namespace ComplexCalculator.API.Controlers
             return Ok(result);
         }
 
+        // write a method to delete all data by userI and name  
+        [HttpDelete(nameof(DeleteAllByNameAndUserId))]
+        public async Task<IActionResult> DeleteAllByNameAndUserId(string userId, string name)
+        {
+            var result = await this._calculator.DeleteAllByNameAndUserId(userId,name);
+            return Ok(result);
+        }
+
         [HttpDelete(nameof(DeleteById))]
         public async Task<IActionResult> DeleteById(int id)
         {

@@ -50,6 +50,7 @@ namespace ComplexCalculator.Application.Models.Admin
         public float TotalMainTube { get; set; } = 0;
         public float TotalLuozi { get; set; } = 0;
         public float TotalSmallTable { get; set; } = 0;      
+        public float TotalSmallTableAndMainTube { get; set; } = 0;      
         public float TotalWinOrLose { get; set; } = 0;      
         public int TotalCurrentlyOnlineUsers { get; set; } = 0;
         public int TotalSignedInUsers { get; set; } = 0;
