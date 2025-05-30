@@ -7,7 +7,7 @@ namespace ComplexCalculator.API.HubExtensions
         public static void MapHubEndpoints(this IEndpointRouteBuilder endpoints)
         {
             endpoints.MapHub<UserHub>("/userhub");
-            endpoints.MapHub<ChatHub>("/chatHub");
+            endpoints.MapHub<EndThreadHub>("/endThreadHub");
             endpoints.MapHub<SyncDataHub>("/syncdataHub");
             endpoints.MapHub<GroupAndOpenSelectHub>("/groupAndOpenHub");
             endpoints.MapHub<DeleteLogOutUserDataHub>("/delete-logout-userdataHub");

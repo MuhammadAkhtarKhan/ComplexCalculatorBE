@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace ComplexCalculator.API.Hubs
 {
     // ChatHub.cs
-    public class ChatHub : Hub
+    public class EndThreadHub : Hub
     {
         public async Task SendMessage(List<Calculator> lstCalculations)
         {
