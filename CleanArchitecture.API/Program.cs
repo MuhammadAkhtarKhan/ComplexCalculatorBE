@@ -99,7 +99,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Map endpoints
 app.MapControllers();
 app.MapHubEndpoints(); // SignalR hubs
 
