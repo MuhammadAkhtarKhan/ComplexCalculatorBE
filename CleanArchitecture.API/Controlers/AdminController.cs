@@ -1,8 +1,10 @@
 ﻿using ComplexCalculator.Application.Contracts.Admin;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComplexCalculator.API.Controlers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -13,6 +15,8 @@ namespace ComplexCalculator.API.Controlers
         {
             this._admin = admin;
         }
+
+        
 
         [HttpGet("GetAdminSummaryAndDataByGroupNoAndTipMode")]
         public async Task<IActionResult> GetAdminSummaryAndDataByGroupNoAndTipMode(int groupNo, int? tipMode=5000)

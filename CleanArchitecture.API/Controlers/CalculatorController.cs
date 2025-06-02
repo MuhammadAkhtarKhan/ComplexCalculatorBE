@@ -7,9 +7,11 @@ using ComplexCalculator.Application.Contracts.Calculator;
 using ComplexCalculator.Application.Models;
 using System.Diagnostics;
 using ComplexCalculator.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ComplexCalculator.API.Controlers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class CalculatorController : ControllerBase
@@ -20,7 +22,7 @@ namespace ComplexCalculator.API.Controlers
             this._calculator = calculator;
         }
 
-
+        [Authorize(Roles = "User")]
         [HttpGet(nameof(GetLatest))]
         public async Task<IActionResult> GetLatest(string userId)
         {
@@ -28,15 +30,16 @@ namespace ComplexCalculator.API.Controlers
             return Ok(new { result = result });
         }
 
-         [HttpGet(nameof(GetLatestBatchNo))]
+        [Authorize(Roles = "User")]
+        [HttpGet(nameof(GetLatestBatchNo))]
         public async Task<IActionResult> GetLatestBatchNo(string UserId)
         {
             var result = await this._calculator.GetLatestBatchNo(UserId);
             return Ok(new { BatchNo = result });
         }
 
-    
 
+        [Authorize(Roles = "User")]
         [HttpPost(nameof(AddMultiple))]
         public async Task<IActionResult> AddMultiple([FromBody] List<CalculatorResponseModel> calculatorModel)
         {
@@ -51,15 +54,15 @@ namespace ComplexCalculator.API.Controlers
             return Ok(result);
         }
 
-     
-        //write a get method to get all data by endThread   
+
+        [Authorize(Roles = "Admin")]
         [HttpGet(nameof(GetAllEndThreadByGroupNo))]
         public async Task<IActionResult> GetAllEndThreadByGroupNo(int groupNo)
         {
             var result = await this._calculator.GetAllEndThreadByGroupNo(groupNo);
             return Ok(result);
         }
-
+        [Authorize(Roles = "User")]
         [HttpGet(nameof(GetAllByGroupNo))]
         public async Task<IActionResult> GetAllByGroupNo(int groupNo)
         {
@@ -67,7 +70,7 @@ namespace ComplexCalculator.API.Controlers
             return Ok(result);
         }
 
-        //write a delete method to delete all data by userId
+        [Authorize(Roles = "User")]
         [HttpDelete(nameof(DeleteAllByUserId))]
         public async Task<IActionResult> DeleteAllByUserId(string userId)
         {
@@ -75,7 +78,8 @@ namespace ComplexCalculator.API.Controlers
             return Ok(result);
         }
 
-        // write a method to delete all data by userI and name  
+        // write a method to delete all data by userI and name
+        [Authorize(Roles = "User")]
         [HttpDelete(nameof(DeleteAllByNameAndUserId))]
         public async Task<IActionResult> DeleteAllByNameAndUserId(string userId, string name)
         {
@@ -83,40 +87,48 @@ namespace ComplexCalculator.API.Controlers
             return Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpDelete(nameof(DeleteById))]
         public async Task<IActionResult> DeleteById(int id)
         {
             var result = await this._calculator.DeleteById(id);
             return Ok(result);
         }
-        // write method for AddTempCalculator   
 
+        // write method for AddTempCalculator
+        [Authorize(Roles = "User")]
         [HttpPost(nameof(AddOrUpdateTempCalculator))]
         public async Task<IActionResult> AddOrUpdateTempCalculator(TempCalculatorResponseModel calculator)
         {
            var result = await _calculator.AddOrUpdateTempCalculator(calculator);
             return Ok(result);
         }
-           [HttpGet(nameof(GetAllTempCalculatorByGroupNo))]
+
+        [Authorize(Roles = "User")]
+        [HttpGet(nameof(GetAllTempCalculatorByGroupNo))]
         public async Task<IActionResult> GetAllTempCalculatorByGroupNo(int groupNo)
         {
            var result = await _calculator.GetAllTempCalculatorByGroupNo(groupNo);
             return Ok(result);
         }
 
+        [Authorize(Roles = "User")]
         [HttpDelete(nameof(DeleteTempCalculator))]
         public async Task<IActionResult> DeleteTempCalculator(int id)
         {
            var res= await _calculator.DeleteTempCalculator(id);
             return Ok(res);
         }
-         [HttpDelete(nameof(DeleteTempCalculatorByUserId))]
+
+        [Authorize(Roles = "User")]
+        [HttpDelete(nameof(DeleteTempCalculatorByUserId))]
         public async Task<IActionResult> DeleteTempCalculatorByUserId(string userId)
         {
            var res= await _calculator.DeleteTempCalculatorByUserId(userId);
             return Ok(res);
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("GetAllSum/{UserId}/{VersionValue}/{BatchNo}")]
         public async Task<IActionResult> GetAllSum(string UserId, int VersionValue, int BatchNo)
         {
