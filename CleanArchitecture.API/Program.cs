@@ -61,8 +61,6 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHubEndpoints(); // Use the extension method here
 
-// Call CreateRoles on app start
-//var serviceProvider = app.Services.CreateScope().ServiceProvider;
 //await CreateRoles(serviceProvider);
 app.Run();
 
