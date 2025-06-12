@@ -185,35 +185,38 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             }
         }
 
-        public async Task<List<TempCalculatorResponseModel>> AddOrUpdateTempCalculator(TempCalculatorResponseModel calc)
+        public async Task<TempCalculatorResponseModel> AddOrUpdateTempCalculator(TempCalculatorResponseModel calc)
         {
             try
             {
-                // Check if the record exists (based on Id or other unique field)
+                TempCalculator entity;
+
+                // Check if the record exists
                 var existing = await _context.TempCalculators.FirstOrDefaultAsync(x => x.Id == calc.Id);
 
                 if (existing != null)
                 {
                     // Update existing entity
-                    _mapper.Map(calc, existing); // Map new values onto existing entity
-                    _context.TempCalculators.Update(existing); // Optional, EF tracks changes
+                    _mapper.Map(calc, existing);
+                    entity = existing;
                 }
                 else
                 {
                     // Add new entity
-                    TempCalculator newCalculation = _mapper.Map<TempCalculator>(calc);
-                    await _context.TempCalculators.AddAsync(newCalculation);
+                    entity = _mapper.Map<TempCalculator>(calc);
+                    await _context.TempCalculators.AddAsync(entity);
                 }
 
                 await _context.SaveChangesAsync();
 
-                // Return full list
-                var allCalculations = await _context.TempCalculators.ToListAsync();
-                return _mapper.Map<List<TempCalculatorResponseModel>>(allCalculations);
+                // Re-fetch to ensure you get DB-generated fields (e.g., Ids, timestamps)
+                var updatedEntity = await _context.TempCalculators.FirstOrDefaultAsync(x => x.Id == entity.Id);
+
+                return _mapper.Map<TempCalculatorResponseModel>(updatedEntity);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error in AddOrUpdateTempCalculator: {ex.Message}");
+                throw new Exception($"Error in AddOrUpdateTempCalculator: {ex.Message}", ex);
             }
         }
 
