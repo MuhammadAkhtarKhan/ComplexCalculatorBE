@@ -92,6 +92,35 @@ namespace ComplexCalculator.Infrastructure.Services.Admin
 
             return response;
         }
+        public async Task<string> UpdateDataByShuttingAndGroupNo(int groupNo, int shutting)
+        {
+            var response= "";
+
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            // Execute the query and get the GridReader
+            var multi = await connection.QueryMultipleAsync(
+                "EXEC dbo.spUpdateDataByShuttingAndGroupNo @GroupNo , @Shutting",
+                new { GroupNo = groupNo, Shutting = shutting }
+            );
+
+            try
+            {
+
+                // Read single-row summary grid data
+                //response.dataPerRoundSum = await multi.ReadFirstOrDefaultAsync<DataPerRoundSum>() ?? new DataPerRoundSum();
+                // Read multiple-row admin calculations
+                response = await multi.ReadFirstOrDefaultAsync<string>();
+            }
+            finally
+            {
+                // Explicitly dispose of the GridReader after all data is read
+                multi.Dispose();
+            }
+
+            return response;
+        }
 
         public async Task<SummaryAndAdminCalculationsResponse> GetAdminSummaryAndDataByGroupNoAndTipMode(int groupNo, int? tipMode=5000)
         {

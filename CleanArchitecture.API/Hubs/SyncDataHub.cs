@@ -5,9 +5,9 @@ namespace ComplexCalculator.API.Hubs
 {
     public class SyncDataHub : Hub
     {
-        public async Task SyncData(List<Calculator> lstCalculations)
+        public async Task SyncData(bool val)
         {
-            await Clients.All.SendAsync("ReceiveData", lstCalculations);
+            await Clients.All.SendAsync("ReceiveData", val);
         }
     }
 

@@ -233,6 +233,33 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
                 throw new Exception($"Error in GetAllTempCalculatorByGroupNo: {ex.Message}");
             }
         }
+        public async Task<string> UpdateShuttingByGroupNo(int groupNo, int shutting)
+        {
+            try
+            {
+                // 1. Retrieve all entries with the given GroupNo
+                List<Calculator> allCalculations = await _context.Calculators
+                    .Where(x => x.GroupNo == groupNo)
+                    .ToListAsync();
+
+                // 2. Update each entity's Shutting value
+                foreach (var calc in allCalculations)
+                {
+                    calc.Shutting = shutting; // Or apply your custom logic
+                }
+
+                // 3. Save changes to the database
+                await _context.SaveChangesAsync();
+
+                // 4. Map to response models and return
+                return "sucess";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in UpdateShuttingByGroupNo: {ex.Message}");
+            }
+        }
+
 
         public async Task<string> DeleteTempCalculator(int id)
         {

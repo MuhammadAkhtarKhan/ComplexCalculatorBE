@@ -1,4 +1,5 @@
 ﻿using ComplexCalculator.Application.Contracts.Admin;
+using ComplexCalculator.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComplexCalculator.API.Controlers
@@ -31,6 +32,13 @@ namespace ComplexCalculator.API.Controlers
         public async Task<IActionResult> GetDataPerRoundByGroupNoAndTipMode(int groupNo, int tipMode)
         {
             var result = await this._admin.GetDataPerRoundByGroupNoAndTipMode(groupNo,tipMode);
+            return Ok(result);
+        }
+
+        [HttpPost("UpdateDataByShuttingAndGroupNo")]
+        public async Task<IActionResult> UpdateDataByShuttingAndGroupNo([FromBody]  UpdateDataRequest request)
+        {
+            var result = await this._admin.UpdateDataByShuttingAndGroupNo(request.GroupNo, request.Shutting);
             return Ok(result);
         }
     }

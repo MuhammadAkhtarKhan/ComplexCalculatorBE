@@ -6,9 +6,9 @@ namespace ComplexCalculator.API.Hubs
 {
     public class GroupAndOpenSelectHub : Hub
     {
-        public async Task SendGroupNoAndOpen(int GroupNo,int OpenVal)
+        public async Task SendGroupNoAndOpen(int GroupNo,int OpenVal, bool isAdmin=false)
         {
-            await Clients.All.SendAsync("ReceiveGroupNoAndOpen", GroupNo,OpenVal);
+            await Clients.All.SendAsync("ReceiveGroupNoAndOpen", GroupNo,OpenVal,isAdmin);
         }
     }
     public class GroupNoAndUserInputHub : Hub

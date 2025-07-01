@@ -6,4 +6,5 @@
         public List<GridCalculatorModel> gridCalculatorModel { get; set; } = [];
     }
 
+
 }

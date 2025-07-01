@@ -12,5 +12,6 @@ namespace ComplexCalculator.Application.Contracts.Admin
         public Task<SummaryAndAdminCalculationsResponse> GetAdminSummaryAndDataByGroupNoAndTipMode(int groupNo,int? tipMode);
         public Task<TotalScoreBoradModelResponse> GetDataTotalScoreBoardByGroupNoAndTipMode(int groupNo, int tipMode);
         public Task<List<DataPerRoundSum>> GetDataPerRoundByGroupNoAndTipMode(int groupNo, int tipMode);
+        public Task<string> UpdateDataByShuttingAndGroupNo(int groupNo, int shutting);
     }
 }

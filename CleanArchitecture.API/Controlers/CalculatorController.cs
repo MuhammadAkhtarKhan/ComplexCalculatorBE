@@ -28,11 +28,17 @@ namespace ComplexCalculator.API.Controlers
             return Ok(new { result = result });
         }
 
-         [HttpGet(nameof(GetLatestBatchNo))]
+        [HttpGet(nameof(GetLatestBatchNo))]
         public async Task<IActionResult> GetLatestBatchNo(string UserId)
         {
             var result = await this._calculator.GetLatestBatchNo(UserId);
             return Ok(new { BatchNo = result });
+        }
+        [HttpPut("UpdateShuttingByGroupNo/{groupNo}")]
+        public async Task<IActionResult> UpdateShuttingByGroupNo(int groupNo, [FromBody] int shutting)
+        {
+            var result = await this._calculator.UpdateShuttingByGroupNo(groupNo,shutting);
+            return Ok(result);
         }
 
     
