@@ -34,14 +34,15 @@ namespace ComplexCalculator.API.Controlers
             var result = await this._calculator.GetLatestBatchNo(UserId);
             return Ok(new { BatchNo = result });
         }
-        [HttpPut("UpdateShuttingByGroupNo/{groupNo}")]
-        public async Task<IActionResult> UpdateShuttingByGroupNo(int groupNo, [FromBody] int shutting)
+    
+        [HttpPost(nameof(UpdateEndThreadByUserIdChangshiAndTongshu))]
+        public async Task<IActionResult> UpdateEndThreadByUserIdChangshiAndTongshu(string userId,int changci, int tongshu)
         {
-            var result = await this._calculator.UpdateShuttingByGroupNo(groupNo,shutting);
+            var result = await this._calculator.UpdateEndThreadByUserIdChangshiAndTongshu(userId, changci, tongshu);
             return Ok(result);
         }
 
-    
+
 
         [HttpPost(nameof(AddMultiple))]
         public async Task<IActionResult> AddMultiple([FromBody] List<CalculatorResponseModel> calculatorModel)
@@ -86,6 +87,13 @@ namespace ComplexCalculator.API.Controlers
         public async Task<IActionResult> DeleteAllByNameAndUserId(string userId, string name)
         {
             var result = await this._calculator.DeleteAllByNameAndUserId(userId,name);
+            return Ok(result);
+        }
+        // write a method to delete all data by userI and name  
+        [HttpDelete(nameof(DeleteAllByUserIdChangshiAndTongshu))]
+        public async Task<IActionResult> DeleteAllByUserIdChangshiAndTongshu(string userId,int changshi, int tongshu)
+        {
+            var result = await this._calculator.DeleteAllByUserIdChangshiAndTongshu(userId,changshi,tongshu);
             return Ok(result);
         }
 

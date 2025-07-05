@@ -17,9 +17,11 @@ namespace ComplexCalculator.Application.Contracts.Calculator
         public Task<string>  DeleteTempCalculator(int id);
         public Task<string>  DeleteTempCalculatorByUserId(string userId);
         public Task<string> UpdateShuttingByGroupNo(int groupNo, int shutting);
+        public Task<string> UpdateEndThreadByUserIdChangshiAndTongshu(string userId, int changshi, int tongshu);
         public Task<List<TempCalculatorResponseModel>> GetAllTempCalculatorByGroupNo(int groupNo);
         public Task<string> DeleteAllByUserId(string UserId);
         public Task<string> DeleteAllByNameAndUserId(string UserId, string name);
+        public Task<string> DeleteAllByUserIdChangshiAndTongshu(string UserId, int changshi, int tongshu);
         public Task<string> DeleteById(int UserId);
         public Task<CalculatorResponseModel> GetLatest(string UserId);
         public Task<int> GetLatestBatchNo(string UserId);

@@ -2,11 +2,15 @@
 using ComplexCalculator.Application.Contracts.Calculator;
 using ComplexCalculator.Application.Models;
 using ComplexCalculator.Domain.Entities;
+using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ComplexCalculator.Infrastructure.Services.CalculatorService
@@ -15,14 +19,16 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-
+        private readonly string _connectionString;
         public CalculatorService(
             ApplicationDbContext context,
-            IMapper mapper
+            IMapper mapper,
+            IConfiguration configuration
             )
         {
             this._context = context;
             this._mapper = mapper;
+            this._connectionString = configuration.GetConnectionString("DefaultConnection");
         }
         public async Task<string> AddCalculation(CalculatorResponseModel calculatorModel)
         {
@@ -72,6 +78,27 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             {
                 var result = await _context.Calculators
                     .Where(c => c.UserId == userId && c.Name==name)
+                    .ToListAsync();
+                if (result.Count == 0)
+                {
+                    return "No record found!";
+                }
+                _context.Calculators.RemoveRange(result);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return "Data deleted successfully!";
+        }
+        public async Task<string> DeleteAllByUserIdChangshiAndTongshu(string userId, int changshi, int tongshu)
+        {
+            if (userId == null) { throw new ArgumentNullException(nameof(userId)); }
+            try
+            {
+                var result = await _context.Calculators
+                    .Where(c => c.UserId == userId && c.Changci==changshi && c.Tongshu==tongshu)
                     .ToListAsync();
                 if (result.Count == 0)
                 {
@@ -258,6 +285,44 @@ namespace ComplexCalculator.Infrastructure.Services.CalculatorService
             {
                 throw new Exception($"Error in UpdateShuttingByGroupNo: {ex.Message}");
             }
+        }    
+        public async Task<string> UpdateEndThreadByUserIdChangshiAndTongshu(string userId, int changci, int tongshu)
+        {
+            var response = "";
+
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();            
+            try
+            {
+                // Execute the query and get the GridReader
+                var rowsAffected = await connection.ExecuteAsync(
+                         "UPDATE Calculators SET EndThread = 1 WHERE UserId = @UserId and Changci=@Changci and Tongshu=@Tongshu;",
+                         new { UserId = userId, Changci =changci, Tongshu=tongshu}
+                     );
+
+                // Optionally check if the update was successful
+                if (rowsAffected > 0)
+                {
+                    response = "success";
+                }
+                else
+                {
+                    response = "no_row_to_update";
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }           
+            finally
+            {
+                // Explicitly dispose of the GridReader after all data is read
+                connection.Dispose();
+            }
+
+            return response;
         }
 
 

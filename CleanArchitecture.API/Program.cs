@@ -37,10 +37,27 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()                       // Allow any headers (Authorization, Content-Type, etc.)
             .AllowCredentials());                   // If you want to send cookies/auth info
 });
+
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+// Seed roles
+//using (var scope = app.Services.CreateScope())
+//{
+//    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+//    string[] roleNames = { "Admin", "User", "AdminWithGroupNoLimit" };
+
+//    foreach (var roleName in roleNames)
+//    {
+//        var roleExists = await roleManager.RoleExistsAsync(roleName);
+//        if (!roleExists)
+//        {
+//            await roleManager.CreateAsync(new IdentityRole(roleName));
+//        }
+//    }
+//}
 app.UseCors("AllowClient");
 
 if (app.Environment.IsDevelopment())
