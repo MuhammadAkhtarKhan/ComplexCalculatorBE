@@ -54,6 +54,7 @@ namespace ComplexCalculator.Application.Models.Admin
         public float TotalWinOrLose { get; set; } = 0;      
         public int TotalCurrentlyOnlineUsers { get; set; } = 0;
         public int TotalSignedInUsers { get; set; } = 0;
+        public int Shutting { get; set; } = 0;
     }
 
 }
