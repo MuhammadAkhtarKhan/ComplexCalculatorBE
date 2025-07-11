@@ -13,5 +13,6 @@ namespace ComplexCalculator.Application.Contracts.Admin
         public Task<TotalScoreBoradModelResponse> GetDataTotalScoreBoardByGroupNoAndTipMode(int groupNo, int tipMode);
         public Task<List<DataPerRoundSum>> GetDataPerRoundByGroupNoAndTipMode(int groupNo, int tipMode);
         public Task<string> UpdateDataByShuttingAndGroupNo(int groupNo, int shutting);
+        public Task<string> ClearAllDataEndThreadOneByGroupNo(int groupNo);
     }
 }

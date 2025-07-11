@@ -121,6 +121,44 @@ namespace ComplexCalculator.Infrastructure.Services.Admin
 
             return response;
         }
+         public async Task<string> ClearAllDataEndThreadOneByGroupNo(int groupNo)
+        {
+            var response = "";
+
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+            try
+            {
+                // Execute the query and get the GridReader
+                var rowsAffected = await connection.ExecuteAsync(
+                         "delete from Calculators where GroupNo=@GroupNo and EndThread=1;",
+                         new { GroupNo = groupNo }
+                     );
+
+                // Optionally check if the update was successful
+                if (rowsAffected > 0)
+                {
+                    response = "success";
+                }
+                else
+                {
+                    response = "no_row_deleted";
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                // Explicitly dispose of the GridReader after all data is read
+                connection.Dispose();
+            }
+
+            return response;
+        }
 
         public async Task<SummaryAndAdminCalculationsResponse> GetAdminSummaryAndDataByGroupNoAndTipMode(int groupNo, int? tipMode=5000)
         {
