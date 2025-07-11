@@ -41,5 +41,11 @@ namespace ComplexCalculator.API.Controlers
             var result = await this._admin.UpdateDataByShuttingAndGroupNo(request.GroupNo, request.Shutting);
             return Ok(result);
         }
+        [HttpDelete("ClearAllDataEndThreadOneByGroupNo")]
+        public async Task<IActionResult> ClearAllDataEndThreadOneByGroupNo(int groupNo)
+        {
+            var result = await this._admin.ClearAllDataEndThreadOneByGroupNo(groupNo);
+            return Ok(result);
+        }
     }
 }
