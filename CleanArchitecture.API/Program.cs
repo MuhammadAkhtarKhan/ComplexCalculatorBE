@@ -31,7 +31,8 @@ builder.Services.AddCors(options =>
                 "http://121.37.227.251:8080", 
                 "http://121.37.227.251:8050", 
                 "http://47.239.123.32:8080", 
-                "http://47.239.123.32:8050"
+                "http://47.239.123.32:8050",
+                "http://makhtarkhan.com:8050"
                 ])  // Frontend origin to allow
             .AllowAnyMethod()                       // Allow all HTTP methods (GET, POST, etc.)
             .AllowAnyHeader()                       // Allow any headers (Authorization, Content-Type, etc.)
