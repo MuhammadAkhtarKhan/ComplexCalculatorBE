@@ -1,4 +1,4 @@
-// CleanArchitecture.API/Program.cs
+﻿// CleanArchitecture.API/Program.cs
 using ComplexCalculator.Application;
 using ComplexCalculator.Infrastructure.Identity;
 using ComplexCalculator.Infrastructure;
@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ComplexCalculator.API.Hubs;
 using ComplexCalculator.API.HubExtensions;
+using ComplexCalculator.API.filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,8 +31,8 @@ builder.Services.AddCors(options =>
                 "http://localhost:4200", 
                 "http://121.37.227.251:8080", 
                 "http://121.37.227.251:8050", 
-                "http://47.239.123.32:8080", 
-                "http://47.239.123.32:8050",
+                //"http://47.239.123.32:8080", 
+                //"http://47.239.123.32:8050",
                 "http://makhtarkhan.com:8050"
                 ])  // Frontend origin to allow
             .AllowAnyMethod()                       // Allow all HTTP methods (GET, POST, etc.)
@@ -39,7 +40,10 @@ builder.Services.AddCors(options =>
             .AllowCredentials());                   // If you want to send cookies/auth info
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<LogActionFilter>();          // DI‑resolved instance
+});
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
